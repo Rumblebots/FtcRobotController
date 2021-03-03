@@ -5,6 +5,7 @@
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton*/
 package org.firstinspires.ftc.teamcode.ultimategoal.auton;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.TargetZone;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.WebcamTFOD;
 
 import java.util.List;
-
+@Autonomous(name = "AutoVision", group = "Auton")
 public class AutoVision extends LinearOpMode {
 
     WebcamTFOD webcam = new WebcamTFOD();
@@ -186,12 +187,29 @@ public class AutoVision extends LinearOpMode {
         pusher = hardwareMap.get(Servo.class, "pusher");
         wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
         webcam.init(hardwareMap);
+        webcam.activateTfod();
         TargetZone z = TargetZone.UNKNOWN;
         while (!isStarted()) {
-            z = webcam.autoInitDetect();
-            if (z != webcam.autoInitDetect()) {
-                break;
+            List<Recognition> updatedRecognitions = webcam.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                // step through the list of recognitions and display boundary info.
+                int i = 0;
+                for (Recognition recognition : updatedRecognitions) {
+                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                            recognition.getLeft(), recognition.getTop());
+                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                            recognition.getRight(), recognition.getBottom());
+                }
+                telemetry.update();
             }
+//            System.out.println(webcam.getUpdatedRecognitions());
+//            z = webcam.autoInitDetect();
+////            if (z != TargetZone.UNKNOWN) {
+////                break;
+////            }
+//            System.out.println(z);
         }
         OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
         getCurrentPos();

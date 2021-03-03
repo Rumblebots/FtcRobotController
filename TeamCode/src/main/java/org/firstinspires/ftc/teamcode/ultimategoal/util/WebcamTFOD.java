@@ -14,13 +14,13 @@ public class WebcamTFOD {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
-    private static final String VUFORIA_KEY =
-            "AaMHb/L/////AAABmV+wis0GQEysrIClzwptLXclDtwtlDiJsCLQCHpCy1cOp3M/aXwpSkDw0nLPjbqIZHUN0T5e3MU4L5Mu0NXOeKtHc8yawpUtGVmKA74pVOo8fBr/STmcWEIiproB4WBFMMds2s1MgcxtwGPQ15u96F+MkztyTmO1fUrHGnOilm0up4R42pldHeJjvFge4N7xa1oUujNtFniuUp6jiN48gLNI/DHFGySf+vB4fDMLCTAKyFh8Ca0haun8kQGntckEvGhvXpL/l2usagU5rHrQyiB9er5UXd5wDKZxv9+YACQpQ9Qcl4LyQa2YelQ/mljey0flEtKfMEzGWjbS+/1yBFeFUWf8EAJwi1AaBeK1xRii";
+    private static final String VUFORIA_KEY = "Adtq/uL/////AAABmcCLRtyrCEwSqHDpqAaHZLCD+lfGkOZPclBIM7sL/JkwWFsdHGQMnkm8o8Tiab7lV6crYVwfD11J/sTJemH5K/2J0uXWfVuQmRYx+DfVIiLwK9kiDL0Kd06+SALTzejuZffRygoUdtjxvZUK9IJ1xfJHxUeJ4kX76Si2p9DhprZBPizrlBu+tKtlUp92asp+vD00mlS1Jp+oYlwzIXymJ5gaanAjskfHcATQhkXCm6Rg9gzafiOOF3MuugcLrzOEpcApRkqWbjC3+jCG1K4IAng1I1J1sq/QebazLfF1CNA7lVq/pNMRq4q4ljCHwlZMgGuxdGQPXhk1qSiKnBVNkT0q0iSEI9Um9Cojj6DOymAy";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     public void activateTfod() {
         if (tfod != null) {
             tfod.activate();
+            tfod.setZoom(2.5, 16/9.0);
         }
     }
     public List<Recognition> getUpdatedRecognitions() {
@@ -51,7 +51,7 @@ public class WebcamTFOD {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.minResultConfidence = 0.6f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
