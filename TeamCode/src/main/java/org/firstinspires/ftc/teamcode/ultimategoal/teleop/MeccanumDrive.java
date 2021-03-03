@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
-public class TestDrive extends OpMode {
+public class MeccanumDrive extends OpMode {
 
     DcMotor frontRight;
     DcMotor frontLeft;
