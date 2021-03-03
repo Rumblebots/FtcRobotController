@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
-import org._11253.lib.robot.phys.assm.drivetrain.MotionType;
-import org.firstinspires.ftc.teamcode.ultimategoal.shared.ShooterThread;
-import org.firstinspires.ftc.teamcode.ultimategoal.shared.subystems.OdometryThread;
+import org.firstinspires.ftc.teamcode.ultimategoal.util.MotionType;
+import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
+import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
 
 @Autonomous(name = "Main Auo", group = "Auton")
 
@@ -188,7 +188,7 @@ public class GenericAuto extends LinearOpMode {
 //        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
-        OdometryThread.initialize(42, backLeft, backRight, frontRight);
+        OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
         ShooterThread shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
         getCurrentPos();

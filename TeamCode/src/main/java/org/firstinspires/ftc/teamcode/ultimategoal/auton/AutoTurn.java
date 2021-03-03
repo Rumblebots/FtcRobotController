@@ -177,6 +177,8 @@ public class AutoTurn extends LinearOpMode {
     }
 
 
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -210,7 +212,7 @@ public class AutoTurn extends LinearOpMode {
 //        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
-        OdometryThread.initialize(42, backLeft, backRight, frontRight);
+        OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
         ShooterThread shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
         getCurrentPos();

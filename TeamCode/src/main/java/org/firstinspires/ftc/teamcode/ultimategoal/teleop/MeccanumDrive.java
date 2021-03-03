@@ -62,7 +62,7 @@ public class MeccanumDrive extends OpMode {
         try {
             OdometryThread.getInstance();
         } catch (Exception e) {
-            OdometryThread.initialize(42, backLeft, backRight, frontRight);
+            OdometryThread.initialize(42, backLeft, backRight, frontRight, () -> true);
         }
     }
 
