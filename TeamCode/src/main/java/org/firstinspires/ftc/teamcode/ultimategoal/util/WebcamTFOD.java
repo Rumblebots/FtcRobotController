@@ -20,7 +20,7 @@ public class WebcamTFOD {
     public void activateTfod() {
         if (tfod != null) {
             tfod.activate();
-            tfod.setZoom(2.5, 16/9.0);
+//            tfod.setZoom(2.5, 16/9.0);
         }
     }
     public List<Recognition> getUpdatedRecognitions() {

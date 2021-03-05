@@ -38,13 +38,14 @@ public class AutoVision extends LinearOpMode {
         return OdometryThread.getInstance().getCurrentPosition();
     }
 
-    public void odometryMove(double x, double y, boolean correct) {
+    public void odometryMove(double x, double y, boolean correct, double timeoutS) {
         boolean initialy = true;
+        long startTime = System.currentTimeMillis();
         if (y + 2 > getCurrentPos().getY()) {
             double power = 0.3;
             double initialPos = getCurrentPos().getY();
             double tenths = (y - getCurrentPos().getY())/10;
-            while (y > getCurrentPos().getY()) {
+            while (y > getCurrentPos().getY() && (System.currentTimeMillis() - startTime)/1000.0 < timeoutS) {
                 double speed = (y - getCurrentPos().getY())/tenths;
                 speed = Math.max(0.3, speed);
                 speed = Math.min(0.8, speed);
@@ -57,7 +58,7 @@ public class AutoVision extends LinearOpMode {
             setPower(0, 0, 0, 0);
             sleep(500);
             double backDist = !initialy ? y + 2 : y;
-            while (backDist < getCurrentPos().getY()) {
+            while (backDist < getCurrentPos().getY() && (System.currentTimeMillis() - startTime)/1000.0 < timeoutS) {
                 if (!initialy && !correct) {
                     break;
                 }
@@ -67,16 +68,17 @@ public class AutoVision extends LinearOpMode {
         if (x == -1) {
             return;
         }
+        startTime = System.currentTimeMillis();
         if (x + 2 > getCurrentPos().getX()) {
             setPower(0, 0, 0, 0);
             sleep(500);
-            while (x > getCurrentPos().getX()) {
+            while (x > getCurrentPos().getX() && (System.currentTimeMillis() - startTime)/1000.0 < timeoutS) {
                 meccanumDrive(MotionType.RIGHT, 0.6);
             }
         } else if (x - 2 < getCurrentPos().getX()){
             setPower(0, 0, 0, 0);
             sleep(500);
-            while (x < getCurrentPos().getX()) {
+            while (x < getCurrentPos().getX() && (System.currentTimeMillis() - startTime)/1000.0 < timeoutS) {
                 meccanumDrive(MotionType.LEFT, 0.5);
             }
         }
@@ -189,18 +191,27 @@ public class AutoVision extends LinearOpMode {
         webcam.init(hardwareMap);
         webcam.activateTfod();
         TargetZone z = TargetZone.UNKNOWN;
+        wobbleDropper.setPosition(0.0);
         while (!isStarted()) {
             List<Recognition> updatedRecognitions = webcam.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
                 // step through the list of recognitions and display boundary info.
-                int i = 0;
                 for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                            recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
+                    if (recognition.getLabel().equals("Quad")) {
+                        z = TargetZone.C;
+                    } else if (recognition.getLabel().equals("Single")) {
+                        z = TargetZone.B;
+                    } else {
+                        z = TargetZone.A;
+                    }
+                    telemetry.addData("Object", recognition.getLabel());
+                    telemetry.addData("Object Label", z);
+//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+//                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+//                            recognition.getLeft(), recognition.getTop());
+//                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+//                            recognition.getRight(), recognition.getBottom());
                 }
                 telemetry.update();
             }
@@ -211,20 +222,27 @@ public class AutoVision extends LinearOpMode {
 ////            }
 //            System.out.println(z);
         }
-        OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
-        getCurrentPos();
         waitForStart();
-        if (z == TargetZone.UNKNOWN) z = TargetZone.B;
+        OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
+        if (z == TargetZone.UNKNOWN) z = TargetZone.A;
         if (!opModeIsActive()) {
             return;
         }
         pusher.setPosition(1);
-        odometryMove(40, 120, true);
-        wobbleDropper.setPosition(0);
-//        wobbleDropper.setPosition(1);
-//        odometryTurn(18, false);
-        odometryMove(80, 54, true);
-        odometryTurn(18, false);
+        switch (z) {
+            case C:
+                odometryMove(28, 115, true, 6);
+                break;
+            case B:
+                odometryMove(40, 95, true, 6);
+                break;
+            case A:
+                odometryMove(28, 75, true, 6);
+                break;
+        }
+        wobbleDropper.setPosition(1.0);
+        odometryMove(79, 54, true, 4);
+        odometryTurn(15, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
         sleep(1500);
@@ -234,13 +252,7 @@ public class AutoVision extends LinearOpMode {
         flywheel1.setPower(0.0);
         flywheel2.setPower(0.0);
 //        odometryMove(49, 14);
-        odometryTurn(5, false);
-//        odometryMove(getCurrentPos().getX()+6, getCurrentPos().getY()-1);
-//        double neededVel = calculateMissing(true, 27);
-//        if (neededVel == -1) {
-//            System.out.println("BAD");
-//        }
-//        spinToSpeed(neededVel);
+        odometryTurn(20, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
         sleep(1500);
@@ -250,7 +262,7 @@ public class AutoVision extends LinearOpMode {
         flywheel1.setPower(0.0);
         flywheel2.setPower(0.0);
 //        odometryMove(getCurrentPos().getX()+6, getCurrentPos().getY());
-        odometryTurn(6, false);
+        odometryTurn(25, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
         sleep(1500);
@@ -261,7 +273,7 @@ public class AutoVision extends LinearOpMode {
         sleep(500);
         flywheel1.setPower(0.0);
         flywheel2.setPower(0.0);
-        odometryMove(-1, 60, false);
+        odometryMove(-1, 60, false, 3);
         OdometryThread.getInstance().stopThread();
     }
 }
