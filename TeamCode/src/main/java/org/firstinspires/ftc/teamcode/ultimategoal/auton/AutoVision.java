@@ -241,7 +241,7 @@ public class AutoVision extends LinearOpMode {
                 break;
         }
         wobbleDropper.setPosition(1.0);
-        odometryMove(79, 54, true, 4);
+        odometryMove(78, 54, true, 4);
         odometryTurn(15, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);

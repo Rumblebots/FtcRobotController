@@ -77,7 +77,6 @@ public class OdometryThread extends Thread{
             }
             OdometryPosition rawPos = OdometryCore.getInstance().getCurrentPosition(new EncoderPositions(-encoderLeft.getCurrentPosition(), encoderRight.getCurrentPosition(), encoderBack.getCurrentPosition()));
             currentPosition = new OdometryPosition(rawPos.getX() + offset, rawPos.getY(), rawPos.getHeadingRadians(), HeadingUnit.RADIANS);
-            System.out.println(currentPosition.getX() + " " + currentPosition.getY());
         }, 0, 10, TimeUnit.MILLISECONDS);
 //        while (running) {
 //            OdometryPosition rawPos = OdometryCore.getInstance().getCurrentPosition(new EncoderPositions(-encoderLeft.getCurrentPosition(), encoderRight.getCurrentPosition(), encoderBack.getCurrentPosition()));

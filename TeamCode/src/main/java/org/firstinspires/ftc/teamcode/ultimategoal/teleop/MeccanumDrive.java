@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
@@ -30,10 +31,13 @@ public class MeccanumDrive extends OpMode {
     Servo intakeMover;
     Servo loader;
     Servo pusher;
+    ColorSensor bottomSensor;
+    ColorSensor topSensor;
     double multiplier = 0.5;
     Toggle t = new Toggle();
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
+    boolean moveUpper = true;
     ShooterThread shooterThread;
     @Override
     public void init() {
@@ -49,6 +53,8 @@ public class MeccanumDrive extends OpMode {
         intakeMover = hardwareMap.get(Servo.class, "intakeMover");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
+        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
+        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
         flywheel1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flywheel2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -90,6 +96,16 @@ public class MeccanumDrive extends OpMode {
         backLeft.setPower(bl * multiplier);
 
 
+        if (bottomSensor.red() > 1000) {
+            moveUpper = false;
+        }
+
+        if (topSensor.red() > 1000) {
+            moveUpper = true;
+        }
+        telemetry.addData("s1 Red", bottomSensor.red());
+        telemetry.addData("s2 red", topSensor.red());
+        telemetry.addData("mover", moveUpper);
         if (gamepad2.a) {
             t.onPress();
         } else {
@@ -103,7 +119,6 @@ public class MeccanumDrive extends OpMode {
 //        }
 
         if (gamepad2.right_bumper) {
-            System.out.println("SHOOT PRESS");
             pusher.setPosition(0.65);
         } else {
             pusher.setPosition(1);
@@ -123,12 +138,16 @@ public class MeccanumDrive extends OpMode {
         if (gamepad2.left_trigger > gamepad2.right_trigger && gamepad2.left_trigger > 0.3) {
             intake.setPower(1.0);
             intakeServo.setPower(0.8);
+            System.out.println("Move HEre");
             upperIntakeServo.setPower(0.8);
         } else if (gamepad2.right_trigger > gamepad2.left_trigger && gamepad2.right_trigger > 0.3) {
             loader.setPosition(1);
             intake.setPower(-1);
             intakeServo.setPower(-0.8);
-            upperIntakeServo.setPower(-0.8);
+            if (moveUpper) {
+                System.out.println("SHOULD BE MOVING");
+                upperIntakeServo.setPower(-0.8);
+            }
         } else {
             loader.setPosition((180.0-36.0)/180.0);
             intake.setPower(0);
@@ -148,8 +167,6 @@ public class MeccanumDrive extends OpMode {
             flywheel1.setPower(0);
             flywheel2.setPower(0);
         }
-        telemetry.addData("Shooter Speed: ", shooterThread.getSpeed());
-        telemetry.update();
 
     }
 
@@ -162,12 +179,8 @@ public class MeccanumDrive extends OpMode {
     void spinToSpeed(double neededVelocity) {
         double speed = 0.7;
         double desiredRps = (5000.0/37.0) * 27;
-        System.out.println("NEEDED VEL: " + neededVelocity);
         do {
-            System.out.println("Calcd: " + calculateMissing(false, 27));
             speed+=0.05;
-            System.out.println("cSpeed: " + speed);
-            System.out.println("CVEL: " + shooterThread.getSpeed());
             flywheel1.setPower(speed);
             flywheel2.setPower(speed);
         } while (desiredRps < shooterThread.getSpeed() && shooterThread.getSpeed() < shooterThread.getMaxRps());
@@ -199,12 +212,10 @@ public class MeccanumDrive extends OpMode {
             return Math.sqrt(rootable);
         } else {
             double speed = shooterThread.getSpeed();
-            System.out.println("SPeed: " + speed);
             double aVal = 4.9;
             double bVal = -speed * Math.sin(angleRads);
             double cVal = -.258823;
             double root = (bVal * bVal) - 4 * aVal * cVal;
-            System.out.println("Root: " + root);
             double rooted = Math.sqrt(root);
             double sol1 = (-bVal + rooted) / (2 * aVal);
             double sol2 = (-bVal - rooted) / (2 * aVal);
