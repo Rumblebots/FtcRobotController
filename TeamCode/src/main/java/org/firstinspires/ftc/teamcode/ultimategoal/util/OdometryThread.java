@@ -5,8 +5,8 @@
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.shared.subystems*/
 package org.firstinspires.ftc.teamcode.ultimategoal.util;
 
-import android.os.Build;
-import androidx.annotation.RequiresApi;
+//import android.os.Build;
+//import androidx.annotation.RequiresApi;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.tejasmehta.OdometryCore.OdometryCore;
 import com.tejasmehta.OdometryCore.localization.EncoderPositions;
@@ -67,7 +67,7 @@ public class OdometryThread extends Thread{
         return currentPosition;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void run() {
         System.out.println("STARTING");
