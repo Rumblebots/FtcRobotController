@@ -69,6 +69,7 @@ public class MeccanumDrive extends OpMode {
         pushToggle.state = false;
         wobbleToggle.state = false;
         intakeMover.setPosition(0.33);
+        wobbleArm.setPosition(0.25);
         shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
         try {
