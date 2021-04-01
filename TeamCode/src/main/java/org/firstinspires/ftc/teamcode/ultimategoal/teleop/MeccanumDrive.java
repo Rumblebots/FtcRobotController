@@ -31,13 +31,13 @@ public class MeccanumDrive extends OpMode {
     Servo intakeMover;
     Servo loader;
     Servo pusher;
-    ColorSensor bottomSensor;
-    ColorSensor topSensor;
+//    ColorSensor bottomSensor;
+//    ColorSensor topSensor;
     double multiplier = 0.5;
     Toggle t = new Toggle();
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
-    boolean moveUpper = true;
+//    boolean moveUpper = true;
     ShooterThread shooterThread;
     @Override
     public void init() {
@@ -53,8 +53,8 @@ public class MeccanumDrive extends OpMode {
         intakeMover = hardwareMap.get(Servo.class, "intakeMover");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
-        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
-        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
+//        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
+//        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
         flywheel1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flywheel2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -96,16 +96,16 @@ public class MeccanumDrive extends OpMode {
         backLeft.setPower(bl * multiplier);
 
 
-        if (bottomSensor.red() > 1000) {
-            moveUpper = false;
-        }
-
-        if (topSensor.red() > 1000) {
-            moveUpper = true;
-        }
-        telemetry.addData("s1 Red", bottomSensor.red());
-        telemetry.addData("s2 red", topSensor.red());
-        telemetry.addData("mover", moveUpper);
+//        if (bottomSensor.red() > 1000) {
+//            moveUpper = false;
+//        }
+//
+//        if (topSensor.red() > 1000) {
+//            moveUpper = true;
+//        }
+//        telemetry.addData("s1 Red", bottomSensor.red());
+//        telemetry.addData("s2 red", topSensor.red());
+//        telemetry.addData("mover", moveUpper);
         if (gamepad2.a) {
             t.onPress();
         } else {
@@ -144,10 +144,10 @@ public class MeccanumDrive extends OpMode {
             loader.setPosition(1);
             intake.setPower(-1);
             intakeServo.setPower(-0.8);
-            if (moveUpper) {
-                System.out.println("SHOULD BE MOVING");
-                upperIntakeServo.setPower(-0.8);
-            }
+            upperIntakeServo.setPower(-0.8);
+//            if (moveUpper) {
+//                System.out.println("SHOULD BE MOVING");
+//            }
         } else {
             loader.setPosition((180.0-36.0)/180.0);
             intake.setPower(0);

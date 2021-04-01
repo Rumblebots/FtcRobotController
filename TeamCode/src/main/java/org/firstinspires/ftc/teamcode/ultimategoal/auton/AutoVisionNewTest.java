@@ -17,8 +17,9 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.TargetZone;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.WebcamTFOD;
 
 import java.util.List;
-@Autonomous(name = "AutoVision", group = "Auton")
-public class AutoVision extends LinearOpMode {
+
+@Autonomous(name = "AutoVisionNewTest", group = "Auton")
+public class AutoVisionNewTest extends LinearOpMode {
 
     WebcamTFOD webcam = new WebcamTFOD();
     DcMotor frontRight;
@@ -30,6 +31,7 @@ public class AutoVision extends LinearOpMode {
     Servo loader;
     Servo pusher;
     Servo wobbleDropper;
+    Servo wobbleArm;
 
     public OdometryPosition getCurrentPos() {
         OdometryPosition currentPosition = OdometryThread.getInstance().getCurrentPosition();
@@ -188,6 +190,7 @@ public class AutoVision extends LinearOpMode {
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
         wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
+        wobbleArm = hardwareMap.get(Servo.class, "wobbleArm");
         webcam.init(hardwareMap);
         webcam.activateTfod();
         TargetZone z = TargetZone.UNKNOWN;
@@ -231,41 +234,45 @@ public class AutoVision extends LinearOpMode {
         pusher.setPosition(1);
         switch (z) {
             case C:
-                odometryMove(28, 115, true, 6);
+                odometryMove(28, 107, true, 6);
                 break;
             case B:
-                odometryMove(40, 95, true, 6);
+                odometryMove(40, 87, true, 6);
                 break;
             case A:
-                odometryMove(28, 75, true, 6);
+                odometryMove(28, 67, true, 6);
                 break;
         }
+        wobbleArm.setPosition(1.0);
+        sleep(500);
         wobbleDropper.setPosition(1.0);
-        odometryMove(77, 56, true, 4);
-        odometryTurn(15, true);
+        sleep(500);
+        wobbleArm.setPosition(0.0);
+        odometryMove(30, 58, true, 4);
+        odometryTurn(-10, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
-        sleep(1500);
+        sleep(1000);
 //        System.out.println(shooterThread.getMaxRps());
         shoot();
         sleep(500);
         flywheel1.setPower(0.0);
         flywheel2.setPower(0.0);
 //        odometryMove(49, 14);
-        odometryTurn(20, true);
+        odometryTurn(-15, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
-        sleep(1500);
+        sleep(1000);
 //        System.out.println(shooterThread.getMaxRps());
         shoot();
         sleep(500);
         flywheel1.setPower(0.0);
         flywheel2.setPower(0.0);
 //        odometryMove(getCurrentPos().getX()+6, getCurrentPos().getY());
-        odometryTurn(25, true);
+        odometryTurn(-20, true);
         flywheel1.setPower(1.0);
         flywheel2.setPower(1.0);
-        sleep(1500);
+        sleep(1000);
 //        System.out.println(shooterThread.getMaxRps());
 //        odometryMove(65, 12);
 //        odometryTurn(40, 128);
