@@ -58,11 +58,11 @@ public class BcThread {
      * @return a method handle for the {@code onSpinWait()} method.
      */
     private static MethodHandle resolve() {
-        try {
-            return MethodHandles.lookup().findStatic(
-                    Thread.class, "onSpinWait", methodType(void.class));
-        } catch (Exception ignore) {
-        }
+//        try {
+//            return MethodHandles.lookup().findStatic(
+//                    Thread.class, "onSpinWait", methodType(void.class));
+//        } catch (Exception ignore) {
+//        }
 
         return null;
     }
@@ -78,13 +78,13 @@ public class BcThread {
      * our own NOP method.
      */
     public static boolean spin() {
-        if (ON_SPIN_WAIT_HANDLE != null) {
-            try {
-                ON_SPIN_WAIT_HANDLE.invokeExact();
-                return true;
-            } catch (Throwable ignore) {
-            }
-        }
+//        if (ON_SPIN_WAIT_HANDLE != null) {
+//            try {
+//                ON_SPIN_WAIT_HANDLE.invokeExact();
+//                return true;
+//            } catch (Throwable ignore) {
+//            }
+//        }
         return false;
     }
 }
