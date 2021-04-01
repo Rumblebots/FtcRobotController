@@ -31,12 +31,15 @@ public class MeccanumDrive extends OpMode {
     Servo intakeMover;
     Servo loader;
     Servo pusher;
+    Servo wobbleArm;
+    Servo wobbleDropper;
 //    ColorSensor bottomSensor;
 //    ColorSensor topSensor;
     double multiplier = 0.5;
     Toggle t = new Toggle();
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
+    Toggle wobbleToggle = new Toggle();
 //    boolean moveUpper = true;
     ShooterThread shooterThread;
     @Override
@@ -53,6 +56,8 @@ public class MeccanumDrive extends OpMode {
         intakeMover = hardwareMap.get(Servo.class, "intakeMover");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
+        wobbleArm = hardwareMap.get(Servo.class, "wobbleArm");
+        wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
 //        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
 //        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
         flywheel1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -62,6 +67,7 @@ public class MeccanumDrive extends OpMode {
         t.state = false;
         loadToggle.state = false;
         pushToggle.state = false;
+        wobbleToggle.state = false;
         intakeMover.setPosition(0.33);
         shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
@@ -112,6 +118,22 @@ public class MeccanumDrive extends OpMode {
             t.onRelease();
         }
 
+        if (gamepad2.x) {
+            wobbleToggle.onPress();
+        } else {
+            wobbleToggle.onRelease();
+        }
+
+        if (gamepad2.dpad_up) {
+            wobbleArm.setPosition(1.0);
+        }
+
+        if (gamepad2.dpad_down) {
+            wobbleArm.setPosition(0.0);
+        }
+
+
+
 //        if (gamepad2.b) {
 //            loadToggle.onPress();
 //        } else {
@@ -153,6 +175,12 @@ public class MeccanumDrive extends OpMode {
             intake.setPower(0);
             intakeServo.setPower(0);
             upperIntakeServo.setPower(0);
+        }
+
+        if (wobbleToggle.state) {
+            wobbleDropper.setPosition(1.0);
+        } else {
+            wobbleDropper.setPosition(0.0);
         }
 
         if (t.state) {
