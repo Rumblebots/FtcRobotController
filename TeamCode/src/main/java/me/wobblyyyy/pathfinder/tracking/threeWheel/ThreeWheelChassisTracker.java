@@ -248,7 +248,7 @@ public class ThreeWheelChassisTracker implements Tracker {
      */
     @Override
     public HeadingPoint getPos() {
-        return position;
+        return position == null ? new HeadingPoint(0, 0, 0) : position;
     }
 
     /**

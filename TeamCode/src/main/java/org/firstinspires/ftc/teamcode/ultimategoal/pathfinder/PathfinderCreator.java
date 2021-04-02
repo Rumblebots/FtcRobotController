@@ -8,22 +8,52 @@ import me.wobblyyyy.pathfinder.followers.Followers;
 import me.wobblyyyy.pathfinder.maps.ftc.EmptyFTC;
 
 public class PathfinderCreator {
-    private static final double SPEED = 0.225;
-
     public static Pathfinder create(DcMotor fr,
                                     DcMotor fl,
                                     DcMotor br,
-                                    DcMotor bl) {
-        PfMotors motors = new PfMotors(fr, fl, br, bl);
-        PfEncoders encoders = new PfEncoders(fr, fl, br);
+                                    DcMotor bl,
+                                    DcMotor encoderL,
+                                    DcMotor encoderR,
+                                    DcMotor encoderB,
+                                    boolean invertFr,
+                                    boolean invertFl,
+                                    boolean invertBr,
+                                    boolean invertBl,
+                                    boolean invertEncoderL,
+                                    boolean invertEncoderR,
+                                    boolean invertEncoderB,
+                                    double speed,
+                                    double wheelDiameter,
+                                    double offsetLeft,
+                                    double offsetRight,
+                                    double offsetBack) {
+        PfMotors motors = new PfMotors(
+                fr, fl, br, bl,
+                invertFr,
+                invertFl,
+                invertBr,
+                invertBl
+        );
+        PfEncoders encoders = new PfEncoders(
+                fr, fl, br,
+                invertEncoderL,
+                invertEncoderR,
+                invertEncoderB
+        );
         PfDrivetrain drive = new PfDrivetrain(motors);
-        PfOdometry odometry = new PfOdometry(encoders);
+        PfOdometry odometry = new PfOdometry(
+                encoders,
+                wheelDiameter,
+                offsetLeft,
+                offsetRight,
+                offsetBack
+        );
 
         PathfinderConfig config = PathfinderConfigurationBuilder
                 .newConfiguration()
                 .drive(drive)
                 .odometry(odometry)
-                .speed(SPEED)
+                .speed(speed)
                 .followerType(Followers.LINEAR)
                 .map(new EmptyFTC())
                 .build();

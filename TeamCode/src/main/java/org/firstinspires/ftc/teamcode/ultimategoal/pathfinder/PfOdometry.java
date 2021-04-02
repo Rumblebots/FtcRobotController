@@ -11,15 +11,19 @@ public class PfOdometry extends ThreeWheelChassisTracker {
     private static final double RIGHT_OFFSET = 0;
     private static final double BACK_OFFSET = 0;
 
-    public PfOdometry(PfEncoders encoders) {
+    public PfOdometry(PfEncoders encoders,
+                      double wheelDiameter,
+                      double offsetLeft,
+                      double offsetRight,
+                      double offsetBack) {
         super(
                 encoders.left,
                 encoders.right,
                 encoders.back,
-                WHEEL_DIAMETER,
-                LEFT_OFFSET,
-                RIGHT_OFFSET,
-                BACK_OFFSET
+                wheelDiameter,
+                offsetLeft,
+                offsetRight,
+                offsetBack
         );
     }
 }

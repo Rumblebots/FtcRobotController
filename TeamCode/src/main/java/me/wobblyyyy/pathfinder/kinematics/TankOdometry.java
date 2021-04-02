@@ -27,69 +27,44 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.math.functional.one;
+package me.wobblyyyy.pathfinder.kinematics;
 
-import me.wobblyyyy.edt.Arrayable;
-import me.wobblyyyy.edt.DynamicArray;
-import me.wobblyyyy.pathfinder.geometry.Point;
+import me.wobblyyyy.pathfinder.geometry.Angle;
+import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.math.functional.Average;
 
-/**
- * Reflect a value across a specific value.
- *
- * @author Colin Robertson
- * @since 0.4.0
- */
-public class Reflection {
-    /**
-     * Reflect a number across 0 as an axis.
-     *
-     * @param value the number that should be reflected.
-     * @return the reflected number.
-     */
-    public static double of(double value) {
-        return of(value, 0);
+public class TankOdometry {
+    private HeadingPoint position;
+    private final Angle offsetAngle;
+    private Angle previousAngle;
+    private double previousL;
+    private double previousR;
+
+    public TankOdometry(Angle gyroscopeAngle,
+                        HeadingPoint startingPosition) {
+        offsetAngle = gyroscopeAngle;
+        position = startingPosition;
     }
 
-    /**
-     * Reflect a number across a specified axis.
-     *
-     * @param value  the number that should be reflected.
-     * @param center the axis to reflect over.
-     * @return the reflected number.
-     */
-    public static double of(double value,
-                            double center) {
-        if (value > center) return center - (Math.abs(center - value));
-        else return center + (Math.abs(center - value));
-    }
+    public HeadingPoint update(double distanceL,
+                               double distanceR,
+                               Angle gyroscopeAngle) {
+        double deltaL = distanceL - previousL;
+        double deltaR = distanceR - previousR;
+        double delta = Average.of(deltaL, deltaR);
 
-    public static DynamicArray<Point> reflectPointsOverX(
-            Arrayable<Point> points,
-            double x) {
-        DynamicArray<Point> newPoints = new DynamicArray<>();
+        Angle angle = gyroscopeAngle.plus(offsetAngle);
 
-        points.itr().forEach(point -> {
-            newPoints.add(new Point(
-                    of(point.getX(), x),
-                    point.getY()
-            ));
-        });
+        position = position.transform(
+                0.0,
+                delta,
+                angle.minus(previousAngle)
+        );
 
-        return newPoints;
-    }
+        previousL = distanceL;
+        previousR = distanceR;
+        previousAngle = angle;
 
-    public static DynamicArray<Point> reflectPointsOverY(
-            Arrayable<Point> points,
-            double y) {
-        DynamicArray<Point> newPoints = new DynamicArray<>();
-
-        points.itr().forEach(point -> {
-            newPoints.add(new Point(
-                    point.getX(),
-                    of(point.getY(), y)
-            ));
-        });
-
-        return newPoints;
+        return position;
     }
 }

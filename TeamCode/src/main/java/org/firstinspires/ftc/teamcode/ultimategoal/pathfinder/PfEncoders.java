@@ -10,9 +10,12 @@ public class PfEncoders {
 
     public PfEncoders(DcMotor leftMotor,
                       DcMotor rightMotor,
-                      DcMotor backMotor) {
-        left = new PfEncoder(leftMotor);
-        right = new PfEncoder(rightMotor);
-        back = new PfEncoder(backMotor);
+                      DcMotor backMotor,
+                      boolean invertEncoderL,
+                      boolean invertEncoderR,
+                      boolean invertEncoderB) {
+        left = new PfEncoder(leftMotor, invertEncoderL);
+        right = new PfEncoder(rightMotor, invertEncoderR);
+        back = new PfEncoder(backMotor, invertEncoderB);
     }
 }

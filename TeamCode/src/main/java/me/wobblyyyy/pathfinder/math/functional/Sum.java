@@ -27,26 +27,38 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.math.functional.set;
-
-import java.util.stream.DoubleStream;
+package me.wobblyyyy.pathfinder.math.functional;
 
 /**
- * Math utility to get the average of a set of numbers.
+ * Functional utility class used to get the sum of a set of inputs.
  *
  * @author Colin Robertson
- * @since 0.5.0
+ * @since 0.6.1
  */
-public class Average {
+public class Sum {
     /**
-     * Get the average of a set of values.
-     *
-     * @param values the values to get the average of.
-     * @return the average of the provided values.
+     * Private constructor so this utility class can't be used
+     * anywhere as an object.
      */
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public static double of(double... values) {
-        if (values.length < 1) return 0;
-        else return DoubleStream.of(values).average().getAsDouble();
+    private Sum() {
+        
+    }
+    
+    /**
+     * Get the sum of a data set. It's worth noting that this method is
+     * slower than manually adding each of the numbers, but it helps
+     * with code clarity and cleanliness.
+     *
+     * @param inputs the data set to get the sum of.
+     * @return the sum of all of the inputted numbers.
+     */
+    public static double of(double... inputs) {
+        double i = 0;
+
+        for (double v : inputs) {
+            i += v;
+        }
+
+        return i;
     }
 }

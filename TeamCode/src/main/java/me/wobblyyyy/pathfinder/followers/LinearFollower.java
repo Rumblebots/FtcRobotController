@@ -165,9 +165,17 @@ public class LinearFollower implements Follower {
      */
     @Override
     public void drive() {
+        HeadingPoint target = Distance.inDirection(
+                new HeadingPoint(0, 0, 0),
+                HeadingPoint.angleOfDeg(
+                        odometry.getPos(),
+                        end
+                ),
+                coefficient
+        ).withHeading();
         RTransform transformation = new RTransform(
-                odometry.getPos(),
-                end,
+                new HeadingPoint(0, 0, 0),
+                target,
                 Angle.fromDegrees(end.getHeading())
         );
 

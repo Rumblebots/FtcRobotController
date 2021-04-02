@@ -27,35 +27,21 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.math.functional.one;
-
-/**
- * Math functionality for finding the reciprocal of a number.
- *
- * @author Colin Robertson
- * @since 0.5.0
- */
-public class Reciprocal {
-    /**
-     * Get the reciprocal of a specified number.
-     *
-     * @param input the number to get the reciprocal of.
-     * @return the number's reciprocal.
-     */
-    public static double of(double input) {
-        return 1 / input;
-    }
-
-    /**
-     * Get the reciprocal of a specified number and multiply it by the provided
-     * scale coefficient.
-     *
-     * @param input the number to get the reciprocal of.
-     * @param scale the number to multiply by.
-     * @return the reciprocal of the specified number, multiplied by the
-     * provided scale value.
-     */
-    public static double of(double input, double scale) {
-        return of(input) * scale;
-    }
-}
+//package me.wobblyyyy.pathfinder.runtime;
+//
+//import org.reflections.Reflections;
+//import org.reflections.scanners.FieldAnnotationsScanner;
+//import org.reflections.util.ClasspathHelper;
+//import org.reflections.util.ConfigurationBuilder;
+//
+//public class Reflect {
+//    private static final Reflections reflections = new Reflections(
+//            new ConfigurationBuilder()
+//                    .setUrls(ClasspathHelper.forPackage(""))
+//                    .setScanners(new FieldAnnotationsScanner())
+//    );
+//
+//    public static Reflections get() {
+//        return reflections;
+//    }
+//}
