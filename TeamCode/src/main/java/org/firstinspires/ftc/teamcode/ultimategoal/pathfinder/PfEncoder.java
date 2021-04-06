@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ultimategoal.pathfinder;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import me.wobblyyyy.pathfinder.math.Invertable;
 import me.wobblyyyy.pathfinder.robot.Encoder;
 
 public class PfEncoder implements Encoder {
@@ -15,9 +16,7 @@ public class PfEncoder implements Encoder {
 
     @Override
     public int getCount() {
-        return isInverted ?
-                motor.getCurrentPosition() * -1 :
-                motor.getCurrentPosition();
+        return Invertable.apply(motor.getCurrentPosition(), isInverted);
     }
 
     @Override
