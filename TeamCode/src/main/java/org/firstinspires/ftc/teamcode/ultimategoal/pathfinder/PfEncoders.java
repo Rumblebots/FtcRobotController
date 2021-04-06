@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.ultimategoal.pathfinder;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import me.wobblyyyy.pathfinder.robot.Encoder;
 
+/**
+ * Container for several encoders.
+ */
 public class PfEncoders {
     public final Encoder left;
     public final Encoder right;

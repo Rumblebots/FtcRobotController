@@ -7,6 +7,9 @@ import me.wobblyyyy.pathfinder.config.PathfinderConfigurationBuilder;
 import me.wobblyyyy.pathfinder.followers.Followers;
 import me.wobblyyyy.pathfinder.maps.ftc.EmptyFTC;
 
+/**
+ * FIXME this whole class sucks
+ */
 public class PathfinderCreator {
     public static Pathfinder create(DcMotor fr,
                                     DcMotor fl,

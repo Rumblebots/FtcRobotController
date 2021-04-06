@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.ultimategoal.pathfinder;
 import me.wobblyyyy.pathfinder.drive.MeccanumDrive;
 
 /**
+ * Wheelbase shouldn't matter all that much - some holonomic drivetrains
+ * require specifications for accurate turning, meccanum drive does not.
+ *
  * @see MeccanumDrive
  */
 public class PfDrivetrain extends MeccanumDrive {

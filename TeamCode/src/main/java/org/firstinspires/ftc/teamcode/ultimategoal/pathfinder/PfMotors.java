@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import me.wobblyyyy.pathfinder.robot.Motor;
 import me.wobblyyyy.pathfinder.robot.MotorBuilder;
 
+/**
+ * Container for several motors (meccanum)
+ */
 public class PfMotors {
     public final Motor frontRight;
     public final Motor frontLeft;
