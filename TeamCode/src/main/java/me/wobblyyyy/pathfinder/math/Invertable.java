@@ -27,27 +27,31 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.kinematics;
+package me.wobblyyyy.pathfinder.math;
 
-public class TankKinematics {
-    private final double gap;
-
-    public TankKinematics(double gap) {
-        this.gap = gap;
-    }
-
-    public TankState toTankState(RTransform transform) {
-        return new TankState(
-                transform.getY() - gap / 2 * transform.getTurn(),
-                transform.getY() + gap / 2 * transform.getTurn()
-        );
-    }
-
-    public RTransform toTransform(TankState state) {
-        return new RTransform(
-                0,
-                (state.getL() + state.getR()) / 2,
-                ((state.getR() - state.getL()) / gap)
-        );
+/**
+ * Represent an invertable of some sort. The best way to demonstrate this
+ * concept is with an example.
+ *
+ * <p>
+ * Let's say you have a velocity output from a motor, but this motor might
+ * be inverted. You could check to see if the motor was inverted, if it is,
+ * multiply the value by -1. If it isn't, don't multiply it at all. Now,
+ * yes, this would work. Or you could use this lovely class. How kind
+ * and generous of this class to offer that lovely functionality!
+ * </p>
+ */
+public class Invertable {
+    /**
+     * Apply a potential inversion to a target number.
+     *
+     * @param target     the number that may or may not be inverted.
+     * @param isInverted is the number inverted?
+     * @return the number multiplied by -1 if it's inverted, the number (not
+     * multiplied at all) if it isn't inverted.
+     */
+    public static double apply(double target,
+                               boolean isInverted) {
+        return isInverted ? target * -1 : target;
     }
 }

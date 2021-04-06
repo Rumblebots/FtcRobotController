@@ -29,7 +29,7 @@
 
 package me.wobblyyyy.pathfinder.geometry;
 
-import me.wobblyyyy.intra.ftc2.utils.math.Math;
+import me.wobblyyyy.pathfinder.math.functional.Average;
 
 /**
  * The most simple geometry of all - a singular point.
@@ -57,6 +57,31 @@ import me.wobblyyyy.intra.ftc2.utils.math.Math;
  * @since 0.1.0
  */
 public class Point {
+    /**
+     * Point: (0, 0, 0)
+     */
+    public static final Point ZERO = new Point(0, 0);
+
+    /**
+     * Point: (0, 1, 0)
+     */
+    public static final Point FORWARDS = new Point(0, 1);
+
+    /**
+     * Point: (1, 0, 0)
+     */
+    public static final Point RIGHTWARDS = new Point(1, 0);
+
+    /**
+     * Point: (0, -1, 0)
+     */
+    public static final Point DOWNWARDS = new Point(0, -1);
+
+    /**
+     * Point: (-1, 0, 0)
+     */
+    public static final Point LEFTWARDS = new Point(-1, 0);
+
     /**
      * The point's X value.
      */
@@ -170,8 +195,8 @@ public class Point {
          * two inputted points.
          */
         return new Point(
-                Math.average(a.getX(), b.getX()),
-                Math.average(a.getY(), b.getY())
+                Average.of(a.getX(), b.getX()),
+                Average.of(a.getY(), b.getY())
         );
     }
 
@@ -308,13 +333,7 @@ public class Point {
      * @return the blended/averaged points.
      */
     public static Point average(Point... points) {
-        Point t = new Point(0, 0);
-
-        for (Point p : points) {
-            t = add(t, p);
-        }
-
-        return scale(t, 1.0 / points.length);
+        return Average.of(points);
     }
 
     /**
@@ -447,5 +466,16 @@ public class Point {
     public static double angleOfDeg(Point a,
                                     Point b) {
         return Math.toDegrees(angleOfRad(a, b));
+    }
+
+    /**
+     * Ensure that the inputted point is not null.
+     *
+     * @param point the point to be de-nullified.
+     * @return if the point IS equal to null, return {@link #ZERO}. If the
+     * point IS NOT null, return the point itself.
+     */
+    public static Point pointOrIfNullZero(Point point) {
+        return point == null ? ZERO : point;
     }
 }

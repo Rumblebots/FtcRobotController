@@ -27,27 +27,38 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.kinematics;
+package me.wobblyyyy.pathfinder.drive;
 
-public class TankKinematics {
-    private final double gap;
+import me.wobblyyyy.pathfinder.control.Controller;
 
-    public TankKinematics(double gap) {
-        this.gap = gap;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+public class SwerveModule {
+    private final Consumer<Double> setTurn;
+    private final Consumer<Double> setDrive;
+    private final Function<Double, Double> getTargetDistance;
+    private final Controller controller;
+
+    public SwerveModule(Consumer<Double> setTurn,
+                        Consumer<Double> setDrive,
+                        Function<Double, Double> getTargetDistance,
+                        Controller controller) {
+        this.setTurn = setTurn;
+        this.setDrive = setDrive;
+        this.getTargetDistance = getTargetDistance;
+        this.controller = controller;
+
+        controller.setTarget(0);
     }
 
-    public TankState toTankState(RTransform transform) {
-        return new TankState(
-                transform.getY() - gap / 2 * transform.getTurn(),
-                transform.getY() + gap / 2 * transform.getTurn()
+    public void update(double turnTarget,
+                       double drivePower) {
+        double turnPower = controller.calculate(
+                getTargetDistance.apply(turnTarget)
         );
-    }
 
-    public RTransform toTransform(TankState state) {
-        return new RTransform(
-                0,
-                (state.getL() + state.getR()) / 2,
-                ((state.getR() - state.getL()) / gap)
-        );
+        setTurn.accept(turnPower);
+        setDrive.accept(drivePower);
     }
 }

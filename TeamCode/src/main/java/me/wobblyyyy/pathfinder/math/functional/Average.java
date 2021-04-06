@@ -29,6 +29,9 @@
 
 package me.wobblyyyy.pathfinder.math.functional;
 
+import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.geometry.Point;
+
 import java.util.stream.DoubleStream;
 
 /**
@@ -48,5 +51,52 @@ public class Average {
     public static double of(double... values) {
         if (values.length < 1) return 0;
         else return DoubleStream.of(values).average().getAsDouble();
+    }
+
+    /**
+     * Get the average of an array of points.
+     *
+     * @param points the points to average.
+     * @return the average of the points.
+     */
+    public static Point of(Point... points) {
+        double sumX = 0;
+        double sumY = 0;
+        final int l = points.length;
+
+        for (Point point : points) {
+            sumX += point.getX();
+            sumY += point.getY();
+        }
+
+        return new Point(
+                sumX / l,
+                sumY / l
+        );
+    }
+
+    /**
+     * Get the average of an array of points.
+     *
+     * @param points the points to average.
+     * @return the average of the points.
+     */
+    public static HeadingPoint of(HeadingPoint... points) {
+        double sumX = 0;
+        double sumY = 0;
+        double sumZ = 0;
+        final int l = points.length;
+
+        for (HeadingPoint point : points) {
+            sumX += point.getX();
+            sumY += point.getY();
+            sumZ += point.getHeading();
+        }
+
+        return new HeadingPoint(
+                sumX / l,
+                sumY / l,
+                sumZ / l
+        );
     }
 }

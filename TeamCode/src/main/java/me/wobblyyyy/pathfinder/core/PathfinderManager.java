@@ -150,8 +150,8 @@ public class PathfinderManager {
         exec = new FollowerExecutor(config.getDrive());
         thread = new PathfinderThreadManager(config.getRawOdometry());
         mainThread = new MainThread(new StaticArray<>(
-                exec::tick,
-                thread::tick
+                thread::tick,
+                exec::tick
         ));
     }
 
@@ -222,13 +222,13 @@ public class PathfinderManager {
     @Sync
     public DynamicArray<Point> getPath(HeadingPoint start,
                                        HeadingPoint end) {
-        if (HeadingPoint.isSame(start, end)) {
-            try {
-                throw new InvalidPathException("Points can not be identical!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        if (HeadingPoint.isSame(start, end)) {
+//            try {
+//                throw new InvalidPathException("Points can not be identical!");
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         return finder.getCoordinatePath(start, end);
     }
@@ -272,11 +272,10 @@ public class PathfinderManager {
         DynamicArray<DynamicArray<Point>> paths = new DynamicArray<>();
 
         points.itr().forEach(point -> {
-            try {
+            if (points.itr().next() != null) {
                 HeadingPoint q = points.itr().next();
                 DynamicArray<Point> pqPath = getPath(point, q);
-                paths.add(pqPath);
-            } catch (Exception ignored) {
+                if (pqPath.size() > 0) paths.add(pqPath);
             }
         });
 
@@ -747,8 +746,8 @@ public class PathfinderManager {
      * is active.
      */
     public void tick() {
-        exec.tick();
         thread.tick();
+        exec.tick();
     }
 
     /**

@@ -41,31 +41,31 @@ import static java.lang.invoke.MethodType.methodType;
  * @since 0.0.0
  */
 public class BcThread {
-    /**
-     * Handler for spin wait operation.
-     */
-    private static final MethodHandle ON_SPIN_WAIT_HANDLE = resolve();
-
-    /**
-     * Empty constructor - no construction here.
-     */
-    private BcThread() {
-    }
-
-    /**
-     * Resolve the method for the {@code onSpinWait()} functionality.
-     *
-     * @return a method handle for the {@code onSpinWait()} method.
-     */
-    private static MethodHandle resolve() {
+//    /**
+//     * Handler for spin wait operation.
+//     */
+//    private static final MethodHandle ON_SPIN_WAIT_HANDLE = resolve();
+//
+//    /**
+//     * Empty constructor - no construction here.
+//     */
+//    private BcThread() {
+//    }
+//
+//    /**
+//     * Resolve the method for the {@code onSpinWait()} functionality.
+//     *
+//     * @return a method handle for the {@code onSpinWait()} method.
+//     */
+//    private static MethodHandle resolve() {
 //        try {
 //            return MethodHandles.lookup().findStatic(
 //                    Thread.class, "onSpinWait", methodType(void.class));
 //        } catch (Exception ignore) {
 //        }
-
-        return null;
-    }
+//
+//        return null;
+//    }
 
     /**
      * If the current version of Java is above 9, indicating we have access

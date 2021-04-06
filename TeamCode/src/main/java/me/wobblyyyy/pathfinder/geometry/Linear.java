@@ -30,8 +30,6 @@
 package me.wobblyyyy.pathfinder.geometry;
 
 import me.wobblyyyy.edt.StaticArray;
-import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
-import me.wobblyyyy.pathfinder.geometry.Spline;
 
 /**
  * An extension of the very lovely {@code Spline} class that seeks to make

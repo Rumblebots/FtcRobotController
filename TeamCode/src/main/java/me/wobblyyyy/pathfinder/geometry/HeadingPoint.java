@@ -29,10 +29,16 @@
 
 package me.wobblyyyy.pathfinder.geometry;
 
-import me.wobblyyyy.intra.ftc2.utils.math.Math;
+import com.tejasmehta.OdometryCore.localization.OdometryPosition;
+import me.wobblyyyy.pathfinder.math.functional.Average;
 
 /**
- * An extension of the default Point class - this time with z.
+ * An extension of the default Point class - this time with z. HeadingPoints
+ * are the very core of much of the geometric operation in Pathfinder.
+ * Such, it's a pretty bulky class, but the core concept is very easy to
+ * understand. A {@code HeadingPoint} can best be expressed as a cartesian
+ * coordinate with a heading value - think of it as {@code (X, Y, Z)}. Makes
+ * sense? Of course it does.
  *
  * <p>
  * For the sake of consistency, every single angle measure in this entire
@@ -54,6 +60,31 @@ import me.wobblyyyy.intra.ftc2.utils.math.Math;
  */
 @SuppressWarnings("unused")
 public class HeadingPoint extends Point {
+    /**
+     * Point: (0, 0, 0)
+     */
+    public static final HeadingPoint ZERO = new HeadingPoint(0, 0, 0);
+
+    /**
+     * Point: (0, 1, 0)
+     */
+    public static final HeadingPoint FORWARDS = new HeadingPoint(0, 1, 0);
+
+    /**
+     * Point: (1, 0, 0)
+     */
+    public static final HeadingPoint RIGHTWARDS = new HeadingPoint(1, 0, 0);
+
+    /**
+     * Point: (0, -1, 0)
+     */
+    public static final HeadingPoint DOWNWARDS = new HeadingPoint(0, -1, 0);
+
+    /**
+     * Point: (-1, 0, 0)
+     */
+    public static final HeadingPoint LEFTWARDS = new HeadingPoint(-1, 0, 0);
+
     /**
      * The point's z.
      */
@@ -239,9 +270,9 @@ public class HeadingPoint extends Point {
     public static HeadingPoint blend(HeadingPoint a,
                                      HeadingPoint b) {
         return new HeadingPoint(
-                Math.average(a.getX(), b.getX()),
-                Math.average(a.getY(), b.getY()),
-                Math.average(a.getHeading(), b.getHeading())
+                Average.of(a.getX(), b.getX()),
+                Average.of(a.getY(), b.getY()),
+                Average.of(a.getHeading(), b.getHeading())
         );
     }
 
@@ -465,22 +496,7 @@ public class HeadingPoint extends Point {
      * @return the blended/averaged points.
      */
     public static HeadingPoint average(HeadingPoint... points) {
-        /*
-         * The cumulative point - the point to be averaged.
-         */
-        HeadingPoint t = new HeadingPoint(0, 0, 0);
-
-        /*
-         * Add to the main point.
-         */
-        for (HeadingPoint p : points) {
-            t = add(t, p);
-        }
-
-        /*
-         * Scale the point, emulating averaging functionality.
-         */
-        return scale(t, points.length);
+        return Average.of(points);
     }
 
     /**
@@ -528,5 +544,30 @@ public class HeadingPoint extends Point {
         return a.getX() == b.getX() &&
                 a.getY() == b.getY() &&
                 a.getHeading() == b.getHeading();
+    }
+
+    /**
+     * Ensure that the inputted point is not null.
+     *
+     * @param point the point to be de-nullified.
+     * @return if the point IS equal to null, return {@link #ZERO}. If the
+     * point IS NOT null, return the point itself.
+     */
+    public static HeadingPoint pointOrIfNullZero(HeadingPoint point) {
+        return point == null ? ZERO : point;
+    }
+
+    /**
+     * Convert an {@code OdometryPosition} into a {@code HeadingPoint}.
+     *
+     * @param position the position to convert.
+     * @return the converted position.
+     */
+    public static HeadingPoint fromOdometryPosition(OdometryPosition position) {
+        return new HeadingPoint(
+                position.getX(),
+                position.getY(),
+                position.getHeadingDegrees()
+        );
     }
 }
