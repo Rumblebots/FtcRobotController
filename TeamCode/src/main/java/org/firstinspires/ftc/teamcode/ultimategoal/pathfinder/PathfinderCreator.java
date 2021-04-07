@@ -7,11 +7,26 @@ import me.wobblyyyy.pathfinder.config.PathfinderConfigurationBuilder;
 import me.wobblyyyy.pathfinder.followers.Followers;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.maps.ftc.EmptyFTC;
+import me.wobblyyyy.pathfinder.tracking.threeWheel.ThreeWheelChassisTracker;
+
+import java.util.function.Supplier;
 
 /**
  * FIXME this whole class sucks
  */
 public class PathfinderCreator {
+
+    private static PfDrivetrain driveTrain;
+    private static ThreeWheelChassisTracker odometry;
+
+    public static PfDrivetrain getDriveTrain() {
+        return driveTrain;
+    }
+
+    public static ThreeWheelChassisTracker getChassisTracker() {
+        return odometry;
+    }
+
     public static Pathfinder create(DcMotor fr,
                                     DcMotor fl,
                                     DcMotor br,
@@ -30,7 +45,8 @@ public class PathfinderCreator {
                                     double wheelDiameter,
                                     double offsetLeft,
                                     double offsetRight,
-                                    double offsetBack) {
+                                    double offsetBack,
+                                    Supplier<Boolean> shouldRun) {
         PfMotors motors = new PfMotors(
                 fr, fl, br, bl,
                 invertFr,
@@ -44,8 +60,8 @@ public class PathfinderCreator {
                 invertEncoderR,
                 invertEncoderB
         );
-        PfDrivetrain drive = new PfDrivetrain(motors);
-        PfOdometry odometry = new PfOdometry(
+        driveTrain = new PfDrivetrain(motors);
+        odometry = new PfOdometry(
                 encoders,
                 wheelDiameter,
                 offsetLeft,
@@ -58,13 +74,14 @@ public class PathfinderCreator {
 
         PathfinderConfig config = PathfinderConfigurationBuilder
                 .newConfiguration()
-                .drive(drive)
+                .drive(driveTrain)
                 .odometry(odometry)
                 .speed(speed)
                 .followerType(Followers.LINEAR)
                 .map(new EmptyFTC())
                 .drivetrainSwapXY(true)
                 .drivetrainInvertX(true)
+                .tickerThreadOnStop(shouldRun)
                 .build();
 
         return new Pathfinder(config);

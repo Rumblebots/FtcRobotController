@@ -74,7 +74,8 @@ public class PathfinderTest extends LinearOpMode {
                 WHEEL_DIAMETER,
                 OFFSET_LEFT,
                 OFFSET_RIGHT,
-                OFFSET_BACK
+                OFFSET_BACK,
+                this::opModeIsActive
         );
     }
 

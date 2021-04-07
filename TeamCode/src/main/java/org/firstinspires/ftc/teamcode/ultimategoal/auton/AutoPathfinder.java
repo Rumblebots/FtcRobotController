@@ -19,16 +19,17 @@ public class AutoPathfinder extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         PathfinderConstants.initializeMotors(hardwareMap);
+        PathfinderConstants.initializePathfinder(this::opModeIsActive);
         Pathfinder pathfinder = PathfinderConstants.getPathfinder();
+        PathfinderConstants.getChassisTracker().setOffset(new Point(42, 0));
         waitForStart();
         sleep(1000);
-        pathfinder.tick();
+        pathfinder.open();
         pathfinder.followPath(
                 new DynamicArray<>(
                         new HeadingPoint(0, 0, 0),
                         new HeadingPoint(0, 80, 0)
                 )
         );
-        pathfinder.tickUntil();
     }
 }

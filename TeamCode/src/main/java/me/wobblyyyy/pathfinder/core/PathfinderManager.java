@@ -47,6 +47,7 @@ import me.wobblyyyy.pathfinder.map.Map;
 import me.wobblyyyy.pathfinder.thread.FollowerExecutor;
 import me.wobblyyyy.pathfinder.thread.MainThread;
 import me.wobblyyyy.pathfinder.thread.PathfinderThreadManager;
+import me.wobblyyyy.pathfinder.thread.TickerThread;
 import me.wobblyyyy.pathfinder.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder.util.Extra;
 
@@ -128,6 +129,11 @@ public class PathfinderManager {
     private final MainThread mainThread;
 
     /**
+     * The pathfinder thread for asynchronous ticking - optionally used
+     */
+    private final TickerThread tickerThread;
+
+    /**
      * Create a new PathfinderManager.
      *
      * <p>
@@ -153,6 +159,7 @@ public class PathfinderManager {
                 thread::tick,
                 exec::tick
         ));
+        tickerThread = new TickerThread(config.getShouldRun(), this::tick);
     }
 
     /**
@@ -169,7 +176,8 @@ public class PathfinderManager {
 
 //        exec.start();
 //        thread.start();
-        mainThread.open();
+//        mainThread.open();
+        tickerThread.start();
     }
 
     /**
@@ -271,17 +279,13 @@ public class PathfinderManager {
 
         DynamicArray<DynamicArray<Point>> paths = new DynamicArray<>();
 
-        try {
-            points.itr().forEach(point -> {
-                if (points.itr().next() != null) {
-                    HeadingPoint q = points.itr().next();
-                    DynamicArray<Point> pqPath = getPath(point, q);
-                    if (pqPath.size() > 0) paths.add(pqPath);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        points.itr().forEach(point -> {
+            if (points.itr().next() != null) {
+                HeadingPoint q = points.itr().next();
+                DynamicArray<Point> pqPath = getPath(point, q);
+                if (pqPath.size() > 0) paths.add(pqPath);
+            }
+        });
 
         return merge(paths);
     }
@@ -740,7 +744,8 @@ public class PathfinderManager {
      */
     @Sync
     public void close() {
-        mainThread.close();
+//        mainThread.close();
+        tickerThread.stopThread();
     }
 
     /**

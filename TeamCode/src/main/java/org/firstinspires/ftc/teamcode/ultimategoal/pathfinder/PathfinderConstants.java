@@ -10,6 +10,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.tracking.threeWheel.ThreeWheelChassisTracker;
+
+import java.util.function.Supplier;
 
 public class PathfinderConstants {
     private static Pathfinder pathfinder;
@@ -48,10 +51,9 @@ public class PathfinderConstants {
         flMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         brMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         blMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 
-    public static void initializePathfinder() {
+    public static void initializePathfinder(Supplier<Boolean> shouldRun) {
         pathfinder = PathfinderCreator.create(
                 frMotor,
                 flMotor,
@@ -71,12 +73,23 @@ public class PathfinderConstants {
                 WHEEL_DIAMETER,
                 OFFSET_LEFT,
                 OFFSET_RIGHT,
-                OFFSET_BACK
+                OFFSET_BACK,
+                shouldRun
         );
     }
 
+    public static PfDrivetrain getDriveTrain() {
+        return PathfinderCreator.getDriveTrain();
+    }
+
+    public static ThreeWheelChassisTracker getChassisTracker() {
+        return PathfinderCreator.getChassisTracker();
+    }
+
     public static Pathfinder getPathfinder() {
-        if (pathfinder == null) initializePathfinder();
+        if (pathfinder == null)
+            throw new IllegalArgumentException(
+                    "Please initialize Pathfinder first");
         return pathfinder;
     }
 }
