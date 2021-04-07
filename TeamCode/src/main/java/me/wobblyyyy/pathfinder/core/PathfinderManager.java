@@ -271,13 +271,17 @@ public class PathfinderManager {
 
         DynamicArray<DynamicArray<Point>> paths = new DynamicArray<>();
 
-        points.itr().forEach(point -> {
-            if (points.itr().next() != null) {
-                HeadingPoint q = points.itr().next();
-                DynamicArray<Point> pqPath = getPath(point, q);
-                if (pqPath.size() > 0) paths.add(pqPath);
-            }
-        });
+        try {
+            points.itr().forEach(point -> {
+                if (points.itr().next() != null) {
+                    HeadingPoint q = points.itr().next();
+                    DynamicArray<Point> pqPath = getPath(point, q);
+                    if (pqPath.size() > 0) paths.add(pqPath);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return merge(paths);
     }

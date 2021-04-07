@@ -23,6 +23,7 @@ public class PfMotors {
                     boolean invertBl) {
         frontRight = MotorBuilder.buildFrom(
                 fr::setPower, fr::getPower, invertFr);
+        System.out.println(invertFl);
         frontLeft = MotorBuilder.buildFrom(
                 fl::setPower, fl::getPower, invertFl);
         backRight = MotorBuilder.buildFrom(

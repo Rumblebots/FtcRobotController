@@ -14,18 +14,18 @@ public class PathfinderTest extends LinearOpMode {
     private Pathfinder pathfinder;
 
     private static final String NAME_FR_MOTOR = "frontRight";
-    private static final String NAME_FL_MOTOR = "frontLeft";
+    private static final String NAME_FL_MOTOR = "backLeft";
     private static final String NAME_BR_MOTOR = "backRight";
-    private static final String NAME_BL_MOTOR = "backLeft";
+    private static final String NAME_BL_MOTOR = "frontLeft";
 
-    private static final boolean INVERT_FR_MOTOR = false;
-    private static final boolean INVERT_FL_MOTOR = true;
-    private static final boolean INVERT_BR_MOTOR = false;
-    private static final boolean INVERT_BL_MOTOR = true;
+    private static final boolean INVERT_FR_MOTOR = true;
+    private static final boolean INVERT_FL_MOTOR = false;
+    private static final boolean INVERT_BR_MOTOR = true;
+    private static final boolean INVERT_BL_MOTOR = false;
 
-    private static final boolean INVERT_ENCODER_L = false;
-    private static final boolean INVERT_ENCODER_R = true;
-    private static final boolean INVERT_ENCODER_B = true;
+    private static final boolean INVERT_ENCODER_L = true;
+    private static final boolean INVERT_ENCODER_R = false;
+    private static final boolean INVERT_ENCODER_B = false;
 
     private static final double SPEED = 0.45;
     private static final double WHEEL_DIAMETER = 1.5;
@@ -40,11 +40,11 @@ public class PathfinderTest extends LinearOpMode {
 
     private static final DynamicArray<HeadingPoint> RECTANGLE =
             new DynamicArray<>(
-                    new HeadingPoint(0, 0, 0),
-                    new HeadingPoint(20, 0, 0),
-                    new HeadingPoint(20, 20, 0),
-                    new HeadingPoint(0, 20, 0),
-                    new HeadingPoint(0, 0, 0)
+                    new HeadingPoint(0.1, 0.1, 0),
+                    new HeadingPoint(20.2, 0.2, 0),
+                    new HeadingPoint(20.3, 20.3, 0),
+                    new HeadingPoint(0.4, 20.4, 0),
+                    new HeadingPoint(0.5, 0.5, 0)
             );
 
     private void initializeMotors() {
@@ -60,9 +60,9 @@ public class PathfinderTest extends LinearOpMode {
                 flMotor,
                 brMotor,
                 blMotor,
-                brMotor,
-                blMotor,
-                frMotor,
+                flMotor, // Left
+                brMotor, // Right
+                frMotor, // Back
                 INVERT_FR_MOTOR,
                 INVERT_FL_MOTOR,
                 INVERT_BR_MOTOR,

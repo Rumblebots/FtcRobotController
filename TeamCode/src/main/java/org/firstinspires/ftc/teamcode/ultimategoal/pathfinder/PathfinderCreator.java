@@ -38,7 +38,7 @@ public class PathfinderCreator {
                 invertBl
         );
         PfEncoders encoders = new PfEncoders(
-                fr, fl, br,
+                encoderL, encoderR, encoderB,
                 invertEncoderL,
                 invertEncoderR,
                 invertEncoderB
@@ -59,6 +59,8 @@ public class PathfinderCreator {
                 .speed(speed)
                 .followerType(Followers.LINEAR)
                 .map(new EmptyFTC())
+                .drivetrainSwapXY(true)
+                .drivetrainInvertX(true)
                 .build();
 
         return new Pathfinder(config);
