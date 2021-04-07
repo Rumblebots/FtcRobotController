@@ -47,12 +47,12 @@ public class WebcamTFOD {
      * Initialize the TensorFlow Object Detection engine.
      */
     private void initTfod(HardwareMap hardwareMap) {
-//        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+//        int tfodMonitorViewId = .getIdentifier(
 //                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-//        tfodParameters.minResultConfidence = 0.6f;
-//        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-//        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(0);
+        tfodParameters.minResultConfidence = 0.6f;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
     public TargetZone autoInitDetect() {
         if (tfod != null) {

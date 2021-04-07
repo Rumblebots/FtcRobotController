@@ -207,20 +207,9 @@ public class AutoVision extends LinearOpMode {
                     }
                     telemetry.addData("Object", recognition.getLabel());
                     telemetry.addData("Object Label", z);
-//                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-//                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-//                            recognition.getLeft(), recognition.getTop());
-//                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-//                            recognition.getRight(), recognition.getBottom());
                 }
                 telemetry.update();
             }
-//            System.out.println(webcam.getUpdatedRecognitions());
-//            z = webcam.autoInitDetect();
-////            if (z != TargetZone.UNKNOWN) {
-////                break;
-////            }
-//            System.out.println(z);
         }
         waitForStart();
         OdometryThread.initialize(42, backLeft, backRight, frontRight, this::opModeIsActive);
