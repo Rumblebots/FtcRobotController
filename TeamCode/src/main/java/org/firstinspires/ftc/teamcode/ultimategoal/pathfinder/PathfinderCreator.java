@@ -5,6 +5,7 @@ import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.config.PathfinderConfig;
 import me.wobblyyyy.pathfinder.config.PathfinderConfigurationBuilder;
 import me.wobblyyyy.pathfinder.followers.Followers;
+import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.maps.ftc.EmptyFTC;
 
 /**
@@ -51,6 +52,9 @@ public class PathfinderCreator {
                 offsetRight,
                 offsetBack
         );
+
+//        odometry.useCurrentPosAsOffset();
+//        odometry.setOffset(new Point(42, 0));
 
         PathfinderConfig config = PathfinderConfigurationBuilder
                 .newConfiguration()

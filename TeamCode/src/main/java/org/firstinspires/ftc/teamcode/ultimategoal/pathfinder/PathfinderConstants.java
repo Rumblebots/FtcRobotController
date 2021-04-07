@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode.test;
+/****
+ * Made by Tejas Mehta
+ * Made on Wednesday, April 07, 2021
+ * File Name: PathfinderConstants
+ * Package: org.firstinspires.ftc.teamcode.ultimategoal.pathfinder*/
+package org.firstinspires.ftc.teamcode.ultimategoal.pathfinder;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderCreator;
 
-@TeleOp(name = "Pathfinder Test", group = "default")
-public class PathfinderTest extends LinearOpMode {
-    private Pathfinder pathfinder;
+public class PathfinderConstants {
+    private static Pathfinder pathfinder;
 
     private static final String NAME_FR_MOTOR = "frontRight";
     private static final String NAME_FL_MOTOR = "backLeft";
@@ -27,34 +28,30 @@ public class PathfinderTest extends LinearOpMode {
     private static final boolean INVERT_ENCODER_R = false;
     private static final boolean INVERT_ENCODER_B = false;
 
-    private static final double SPEED = 1.0;
+    private static final double SPEED = 0.75;
     private static final double WHEEL_DIAMETER = 1.5;
     private static final double OFFSET_LEFT = 7.83;
     private static final double OFFSET_RIGHT = 7.83;
     private static final double OFFSET_BACK = 1.0;
 
-    private DcMotor frMotor;
-    private DcMotor flMotor;
-    private DcMotor brMotor;
-    private DcMotor blMotor;
+    private static DcMotor frMotor;
+    private static DcMotor flMotor;
+    private static DcMotor brMotor;
+    private static DcMotor blMotor;
 
-    private static final DynamicArray<HeadingPoint> RECTANGLE =
-            new DynamicArray<>(
-                    new HeadingPoint(0.1, 0.1, 0),
-                    new HeadingPoint(20.2, 0.2, 0),
-                    new HeadingPoint(20.3, 20.3, 0),
-                    new HeadingPoint(0.4, 20.4, 0),
-                    new HeadingPoint(0.5, 0.5, 0)
-            );
-
-    private void initializeMotors() {
+    public static void initializeMotors(HardwareMap hardwareMap) {
         frMotor = hardwareMap.dcMotor.get(NAME_FR_MOTOR);
         flMotor = hardwareMap.dcMotor.get(NAME_FL_MOTOR);
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
+        frMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        brMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
-    private void initializePathfinder() {
+    public static void initializePathfinder() {
         pathfinder = PathfinderCreator.create(
                 frMotor,
                 flMotor,
@@ -78,21 +75,8 @@ public class PathfinderTest extends LinearOpMode {
         );
     }
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        waitForStart();
-
-        initializeMotors();
-        initializePathfinder();
-
-        Thread.sleep(500);
-
-        pathfinder.followPath(RECTANGLE);
-
-        while (opModeIsActive()) {
-            pathfinder.tick();
-            telemetry.addData("pos", pathfinder.getPosition().toString());
-            telemetry.update();
-        }
+    public static Pathfinder getPathfinder() {
+        if (pathfinder == null) initializePathfinder();
+        return pathfinder;
     }
 }
