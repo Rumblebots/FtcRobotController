@@ -31,10 +31,10 @@ package me.wobblyyyy.pathfinder.kinematics;
 
 import me.wobblyyyy.edt.Arrayable;
 import me.wobblyyyy.edt.StaticArray;
+import me.wobblyyyy.pathfinder.geometry.Distance;
 import me.wobblyyyy.pathfinder.math.GearRatio;
 import me.wobblyyyy.pathfinder.math.RotationalVelocity;
 import me.wobblyyyy.pathfinder.math.WheelSize;
-import me.wobblyyyy.pathfinder.geometry.Distance;
 
 /**
  * Convert between wheel speed (-1 to 1) and velocity (in inches per second,

@@ -42,7 +42,8 @@ public class FollowerFactory {
                 config.getRawOdometry(),
                 points.get(0),
                 points.get(1),
-                config.getSpeed()
+                config.getSpeed(),
+                config.getTurnController()
         );
     }
 

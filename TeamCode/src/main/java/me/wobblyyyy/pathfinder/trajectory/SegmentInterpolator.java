@@ -251,7 +251,7 @@ public class SegmentInterpolator {
      * {@link #atPercentX(double)} or {@link #atPercentY(double)} methods
      * instead of this one.
      */
-//    @Deprecated(forRemoval = true)
+    @Deprecated(forRemoval = true)
     public Point atPercent(double percent) {
         Point basedOnX = atPercentX(percent);
         Point basedOnY = atPercentY(percent);

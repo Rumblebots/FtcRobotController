@@ -27,8 +27,29 @@
  *
  */
 
-package me.wobblyyyy.pathfinder.runtime;
+package me.wobblyyyy.pathfinder.control;
 
-public class AnnotationProcessor {
+import me.wobblyyyy.pathfinder.math.functional.Reciprocal;
 
+/**
+ * Analogous to the {@link DefaultTurnController}, but it's inverted.
+ * Fancy, I know!
+ *
+ * @author Colin Robertson
+ * @since 0.7.0
+ * @see DefaultTurnController
+ */
+public class ReversedTurnController extends ProportionalController {
+    /**
+     * Create a new {@code ReversedTurnController}.
+     *
+     * @see DefaultTurnController#DefaultTurnController()
+     */
+    public ReversedTurnController() {
+        super(-Reciprocal.of(90));
+
+        setTarget(0);
+        setMin(-1.0);
+        setMax(+1.0);
+    }
 }

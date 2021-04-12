@@ -52,10 +52,9 @@ public class Invertable {
      */
     public static double apply(double target,
                                boolean isInverted) {
-//        return 0;
         return isInverted ? target * -1 : target;
     }
-
+    
     /**
      * Apply a potential inversion to a target number.
      *

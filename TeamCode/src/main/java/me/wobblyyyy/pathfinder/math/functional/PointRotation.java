@@ -30,9 +30,9 @@
 package me.wobblyyyy.pathfinder.math.functional;
 
 import me.wobblyyyy.edt.DynamicArray;
+import me.wobblyyyy.pathfinder.geometry.Distance;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
-import me.wobblyyyy.pathfinder.geometry.Distance;
 
 /**
  * Utilities used for rotating {@link Point}s and {@link HeadingPoint}s.
