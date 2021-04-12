@@ -8,40 +8,83 @@ package org.firstinspires.ftc.teamcode.ultimategoal.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
+import me.wobblyyyy.edt.DynamicArray;
+import me.wobblyyyy.pathfinder.api.Pathfinder;
+import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.geometry.Point;
+import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderConstants;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
+    private static final HeadingPoint TARGET_A = HeadingPoint.ZERO;
+    private static final HeadingPoint TARGET_B = HeadingPoint.ZERO;
+    private static final HeadingPoint TARGET_X = HeadingPoint.ZERO;
+    private static final HeadingPoint TARGET_Y = HeadingPoint.ZERO;
+
+    private boolean aPressedLast = false;
+    private boolean bPressedLast = false;
+    private boolean xPressedLast = false;
+    private boolean yPressedLast = false;
+
+    private boolean aPressed = false;
+    private boolean bPressed = false;
+    private boolean xPressed = false;
+    private boolean yPressed = false;
+
+    private HeadingPoint target = HeadingPoint.ZERO;
+    private boolean mustReset = false;
+
+    Pathfinder pathfinder;
 
     DcMotor frontRight;
+
     DcMotor frontLeft;
+
     DcMotor backRight;
+
     DcMotor backLeft;
+
     DcMotor flywheel1;
+
     DcMotor flywheel2;
+
     DcMotor intake;
+
     CRServo intakeServo;
+
     CRServo upperIntakeServo;
+
     Servo intakeMover;
+
     Servo loader;
+
     Servo pusher;
+
     Servo wobbleArm;
+
     Servo wobbleDropper;
-//    ColorSensor bottomSensor;
+
+    //    ColorSensor bottomSensor;
 //    ColorSensor topSensor;
     double multiplier = 0.5;
+
     Toggle t = new Toggle();
+
     Toggle loadToggle = new Toggle();
+
     Toggle pushToggle = new Toggle();
+
     Toggle wobbleToggle = new Toggle();
-//    boolean moveUpper = true;
+
+    //    boolean moveUpper = true;
     ShooterThread shooterThread;
+
     @Override
     public void init() {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -77,10 +120,87 @@ public class MeccanumDrive extends OpMode {
         } catch (Exception e) {
             OdometryThread.initialize(42, backLeft, backRight, frontRight, () -> true);
         }
+        PathfinderConstants.initializeMotors(hardwareMap);
+        PathfinderConstants.initializePathfinder(() -> false);
+        pathfinder = PathfinderConstants.getPathfinder();
+        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
+    }
+
+    public boolean pressed(boolean current,
+                           boolean last) {
+        return current && !last;
+    }
+
+    public void updateButtons(boolean a,
+                              boolean b,
+                              boolean x,
+                              boolean y) {
+        aPressed = pressed(a, aPressedLast);
+        bPressed = pressed(b, bPressedLast);
+        xPressed = pressed(x, xPressedLast);
+        yPressed = pressed(y, yPressedLast);
+
+        aPressedLast = a;
+        bPressedLast = b;
+        xPressedLast = x;
+        yPressedLast = y;
+    }
+
+    public void updatePathfinder() {
+        if (mustReset) {
+            // if the pathfinder needs to reset its path
+            if (pathfinder.getManager().getExecutor().isEmpty()) {
+                // if the exec is empty we need to regen a path
+                pathfinder.followPath(new DynamicArray<>(
+                        HeadingPoint.pointOrIfNullZero(
+                                pathfinder.getPosition()
+                        ),
+                        target
+                ));
+
+                // pathfinder shouldn't reset anymore
+                mustReset = false;
+            } else {
+                // clear the pathfinder, recurse
+                pathfinder.getManager().getExecutor().clear();
+
+                updatePathfinder();
+            }
+        }
     }
 
     @Override
     public void loop() {
+        // update each of the button's press status
+        // buttons can only be "pressed" once
+        // they're only considered to be "pressed" the first execution of
+        // the loop when they're pressed, afterwards they can be reset and
+        // re-pressed if that makes sense???
+        updateButtons(
+                gamepad1.a,
+                gamepad1.b,
+                gamepad1.x,
+                gamepad1.y
+        );
+
+        // if any of the buttons are pressed we have to reset
+        if (aPressed || bPressed || xPressed || yPressed) mustReset = true;
+
+        // set the pathfinder's target based on whatever point is used
+        if (aPressed) {
+            target = TARGET_A;
+        } else if (bPressed) {
+            target = TARGET_B;
+        } else if (xPressed) {
+            target = TARGET_X;
+        } else if (yPressed) {
+            target = TARGET_Y;
+        }
+
+        // update and tick the pathfinder
+        updatePathfinder();
+        pathfinder.tick();
+
         if (gamepad1.left_trigger != 0 && gamepad1.right_trigger == 0) {
             multiplier = 0.25;
         } else {
@@ -134,7 +254,6 @@ public class MeccanumDrive extends OpMode {
         }
 
 
-
 //        if (gamepad2.b) {
 //            loadToggle.onPress();
 //        } else {
@@ -172,7 +291,7 @@ public class MeccanumDrive extends OpMode {
 //                System.out.println("SHOULD BE MOVING");
 //            }
         } else {
-            loader.setPosition((180.0-36.0)/180.0);
+            loader.setPosition((180.0 - 36.0) / 180.0);
             intake.setPower(0);
             intakeServo.setPower(0);
             upperIntakeServo.setPower(0);
@@ -207,9 +326,9 @@ public class MeccanumDrive extends OpMode {
 
     void spinToSpeed(double neededVelocity) {
         double speed = 0.7;
-        double desiredRps = (5000.0/37.0) * 27;
+        double desiredRps = (5000.0 / 37.0) * 27;
         do {
-            speed+=0.05;
+            speed += 0.05;
             flywheel1.setPower(speed);
             flywheel2.setPower(speed);
         } while (desiredRps < shooterThread.getSpeed() && shooterThread.getSpeed() < shooterThread.getMaxRps());
@@ -225,16 +344,16 @@ public class MeccanumDrive extends OpMode {
     // Equation: .64(v * cos(45))^2 - (v * cos(45))^2 * x + 4.9x^2 = 0 <-- Solve for distance
     // Equation: (v * cos(45))^2 = -4.9x^2 / (.64 - x) <-- Solve for velocity
     double calculateMissing(boolean vMode, double yDist) {
-        double height = (yDist/39.37) - .258823;
+        double height = (yDist / 39.37) - .258823;
         double startToGoal = 135.5;
         double angleRads = Math.toRadians(45);
         double cosCalc = Math.cos(angleRads);
         double tanCalc = Math.tan(angleRads);
         if (vMode) {
-            double distToGoal = (startToGoal - getCurrentPos().getY() -55.5)/39.37;
+            double distToGoal = (startToGoal - getCurrentPos().getY() - 55.5) / 39.37;
             double constant = -4.9 * (distToGoal * distToGoal);
             double vVal = (height * cosCalc) - (cosCalc * distToGoal * tanCalc);
-            double rootable = constant/vVal;
+            double rootable = constant / vVal;
             if (rootable < 0) {
                 return -1;
             }
