@@ -321,7 +321,7 @@ public class PathfinderManager {
             );
         }
 
-        path.add(0, config.getRawOdometry().getPos());
+        path.add(0, HeadingPoint.pointOrIfNullZero(config.getRawOdometry().getPos()));
 
         path.itr().forEach(point -> {
             try {

@@ -66,7 +66,7 @@ public class MeccanumDrive extends OpMode {
 
     Servo pusher;
 
-    Servo wobbleArm;
+    DcMotor wobbleArm;
 
     Servo wobbleDropper;
 
@@ -99,7 +99,7 @@ public class MeccanumDrive extends OpMode {
         intakeMover = hardwareMap.get(Servo.class, "intakeMover");
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
-        wobbleArm = hardwareMap.get(Servo.class, "wobbleArm");
+        wobbleArm = hardwareMap.get(DcMotor.class, "wobbleArm");
         wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
 //        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
 //        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
@@ -112,7 +112,7 @@ public class MeccanumDrive extends OpMode {
         pushToggle.state = false;
         wobbleToggle.state = true;
         intakeMover.setPosition(0.33);
-        wobbleArm.setPosition(0.25);
+//        wobbleArm.setPosition(0.25);
         shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
         try {
@@ -246,11 +246,11 @@ public class MeccanumDrive extends OpMode {
         }
 
         if (gamepad2.dpad_up) {
-            wobbleArm.setPosition(0.0);
-        }
-
-        if (gamepad2.dpad_down) {
-            wobbleArm.setPosition(0.94);
+            wobbleArm.setPower(0.5);
+        } else if (gamepad2.dpad_down) {
+            wobbleArm.setPower(-0.0);
+        } else {
+            wobbleArm.setPower(0);
         }
 
 

@@ -31,7 +31,7 @@ public class PathfinderConstants {
     private static final boolean INVERT_ENCODER_R = false;
     private static final boolean INVERT_ENCODER_B = false;
 
-    private static final double SPEED = 0.75;
+    private static final double SPEED = 0.65;
     private static final double WHEEL_DIAMETER = 1.5;
     private static final double OFFSET_LEFT = 7.83;
     private static final double OFFSET_RIGHT = 7.83;
