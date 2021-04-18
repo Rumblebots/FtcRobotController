@@ -37,7 +37,7 @@ public class AutoPathfinder extends LinearOpMode {
     DigitalChannel armOut;
     DigitalChannel armIn;
 
-    HeadingPoint wobblePoint = new HeadingPoint(11, 70, 0);
+    HeadingPoint wobblePoint = new HeadingPoint(20, 70, 0);
 
     void initialize() {
         flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
@@ -61,11 +61,11 @@ public class AutoPathfinder extends LinearOpMode {
                 // step through the list of recognitions and display boundary info.
                 for (Recognition recognition : updatedRecognitions) {
                     if (recognition.getLabel().equals("Quad")) {
-                        wobblePoint = new HeadingPoint(12, 113, 0);
+                        wobblePoint = new HeadingPoint(20, 113, 0);
                     } else if (recognition.getLabel().equals("Single")) {
-                        wobblePoint = new HeadingPoint(35, 93, 0);
+                        wobblePoint = new HeadingPoint(45, 93, 0);
                     } else {
-                        wobblePoint = new HeadingPoint(12, 73, 0);
+                        wobblePoint = new HeadingPoint(20, 73, 0);
                     }
                     telemetry.addData("Object", recognition.getLabel());
                 }
@@ -90,6 +90,8 @@ public class AutoPathfinder extends LinearOpMode {
         PathfinderConstants.initializeMotors(hardwareMap);
         PathfinderConstants.initializePathfinder(this::opModeIsActive);
         Pathfinder pathfinder = PathfinderConstants.getPathfinder();
+        pathfinder.getManager().getExecutor().clear();
+        System.out.println("CLR: " + pathfinder.getPosition());
         PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
         initialize();
         runVision();
@@ -101,7 +103,10 @@ public class AutoPathfinder extends LinearOpMode {
                         wobblePoint
                 )
         );
-        pathfinder.tickUntil();
+        while (!Distance.isNearPoint(Point.pointOrIfNullZero(pathfinder.getPosition()), wobblePoint, 3)) {
+            System.out.println(pathfinder.getPosition());
+            System.out.println(wobblePoint);
+        }
 //        while (HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()).getY() < wobblePoint.getY()) {}
         while (armOut.getState()) {
             wobbleArm.setPower(0.3);
@@ -110,7 +115,7 @@ public class AutoPathfinder extends LinearOpMode {
         wobbleDropper.setPosition(1.0);
         pathfinder.followPath(new DynamicArray<>(
                 wobblePoint,
-                new HeadingPoint(42, 50, 0)
+                new HeadingPoint(37, 50, 0)
         ));
         pathfinder.tickUntil();
 //        while (Distance.isNearPoint(HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()), new HeadingPoint(42, 50, 0), 3)) { }
@@ -122,14 +127,14 @@ public class AutoPathfinder extends LinearOpMode {
         sleep(500);
         pathfinder.followPath(new DynamicArray<>(
                 pathfinder.getPosition(),
-                new HeadingPoint(47, 50, 10)
+                new HeadingPoint(42, 50, 10)
         ));
         pathfinder.tickUntil();
 //        while (Distance.isNearPoint(HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()), new HeadingPoint(47, 50, 0), 3)) { }
         shoot();
         pathfinder.followPath(new DynamicArray<>(
                 pathfinder.getPosition(),
-                new HeadingPoint(52, 50, 10)
+                new HeadingPoint(47, 50, 10)
         ));
         pathfinder.tickUntil();
 //        while (Distance.isNearPoint(HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()), new HeadingPoint(52, 50, 0), 3)) { }
@@ -141,12 +146,16 @@ public class AutoPathfinder extends LinearOpMode {
 //                new HeadingPoint(52, 65, 10)
 //        ));
 //        while (HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()).getY() < 65) {}
+        HeadingPoint point = new HeadingPoint(pathfinder.getPosition().getX(), 57, 0);
         pathfinder.followPath(new DynamicArray<>(
                 pathfinder.getPosition(),
-                new HeadingPoint(22, pathfinder.getPosition().getY(), 0)
+                point
         ));
-        pathfinder.tickUntil();
-//        pathfinder.followPath(new DynamicArray<>(
+        while (!Distance.isNearPoint(pathfinder.getPosition(), point, 2) && opModeIsActive()) {}
+        if (!opModeIsActive()) {
+            pathfinder.stopRobot();
+        }
+        //        pathfinder.followPath(new DynamicArray<>(
 //                pathfinder.getPosition(),
 //                new HeadingPoint(pathfinder.getPosition().getX(), 5, 0)
 //        ));
@@ -166,14 +175,14 @@ public class AutoPathfinder extends LinearOpMode {
 ////        pathfinder.tickUntil();
 //        wobbleDropper.setPosition(1.0);
 //        sleep(700);
-        HeadingPoint point = new HeadingPoint(pathfinder.getPosition().getX(), 60, 0);
-        pathfinder.followPath(new DynamicArray<>(
-                pathfinder.getPosition(),
-                point
-        ));
-        while (!Distance.isNearPoint(pathfinder.getPosition(), point, 2) && opModeIsActive()) {}
-        pathfinder.stopRobot();
-        return;
+//        HeadingPoint point = new HeadingPoint(pathfinder.getPosition().getX(), 60, 0);
+//        pathfinder.followPath(new DynamicArray<>(
+//                pathfinder.getPosition(),
+//                point
+//        ));
+//        while (!Distance.isNearPoint(pathfinder.getPosition(), point, 2) && opModeIsActive()) {}
+//        pathfinder.stopRobot();
+//        return;
 //        pathfinder.lock();
     }
 }

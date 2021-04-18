@@ -19,6 +19,7 @@ public class WebcamTFOD {
     public void activateTfod() {
         if (tfod != null) {
             tfod.activate();
+
 //            tfod.setZoom(2.5, 16/9.0);
         }
     }
@@ -53,6 +54,7 @@ public class WebcamTFOD {
         tfodParameters.minResultConfidence = 0.6f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+
     }
     public TargetZone autoInitDetect() {
         if (tfod != null) {

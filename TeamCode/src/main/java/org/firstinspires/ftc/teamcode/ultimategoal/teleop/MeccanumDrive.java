@@ -248,7 +248,7 @@ public class MeccanumDrive extends OpMode {
         if (gamepad2.dpad_up) {
             wobbleArm.setPower(0.5);
         } else if (gamepad2.dpad_down) {
-            wobbleArm.setPower(-0.0);
+            wobbleArm.setPower(-0.5);
         } else {
             wobbleArm.setPower(0);
         }

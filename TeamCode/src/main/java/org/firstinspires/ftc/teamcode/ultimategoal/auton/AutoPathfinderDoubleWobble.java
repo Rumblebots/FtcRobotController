@@ -34,7 +34,7 @@ public class AutoPathfinderDoubleWobble extends LinearOpMode {
     DigitalChannel armOut;
     DigitalChannel armIn;
 
-    HeadingPoint wobblePoint = new HeadingPoint(11, 70, 0);
+    HeadingPoint wobblePoint = new HeadingPoint(15, 70, 0);
 
     void initialize() {
         flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
@@ -58,11 +58,11 @@ public class AutoPathfinderDoubleWobble extends LinearOpMode {
                 // step through the list of recognitions and display boundary info.
                 for (Recognition recognition : updatedRecognitions) {
                     if (recognition.getLabel().equals("Quad")) {
-                        wobblePoint = new HeadingPoint(12, 113, 0);
+                        wobblePoint = new HeadingPoint(15, 113, 0);
                     } else if (recognition.getLabel().equals("Single")) {
                         wobblePoint = new HeadingPoint(35, 93, 0);
                     } else {
-                        wobblePoint = new HeadingPoint(12, 73, 0);
+                        wobblePoint = new HeadingPoint(15, 73, 0);
                     }
                     telemetry.addData("Object", recognition.getLabel());
                 }
@@ -93,9 +93,6 @@ public class AutoPathfinderDoubleWobble extends LinearOpMode {
         initialize();
         runVision();
         waitForStart();
-        pathfinder.getManager().getExecutor().clear();
-        System.out.println("CLR: " + pathfinder.getPosition());
-        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
         pathfinder.open();
         pathfinder.followPath(
                 new DynamicArray<>(
@@ -103,7 +100,7 @@ public class AutoPathfinderDoubleWobble extends LinearOpMode {
                         wobblePoint
                 )
         );
-        while (HeadingPoint.pointOrIfNullZero(pathfinder.getPosition()).getY() < wobblePoint.getY()) {
+        while (!Distance.isNearPoint(Point.pointOrIfNullZero(pathfinder.getPosition()), wobblePoint, 3)) {
             System.out.println(pathfinder.getPosition());
             System.out.println(wobblePoint);
         }
