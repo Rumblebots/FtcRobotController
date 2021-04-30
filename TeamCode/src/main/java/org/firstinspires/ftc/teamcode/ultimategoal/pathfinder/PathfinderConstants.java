@@ -47,6 +47,10 @@ public class PathfinderConstants {
         flMotor = hardwareMap.dcMotor.get(NAME_FL_MOTOR);
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
+        frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         flMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         brMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
