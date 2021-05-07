@@ -14,10 +14,11 @@ public class PathfinderTest extends LinearOpMode {
     private Pathfinder pathfinder;
 
     private static final String NAME_FR_MOTOR = "frontRight";
+//        private static final String NAME_FR_MOTOR = "backRight";
     private static final String NAME_FL_MOTOR = "backLeft";
     private static final String NAME_BR_MOTOR = "backRight";
     private static final String NAME_BL_MOTOR = "frontLeft";
-
+//    private static final String NAME_BR_MOTOR = "frontRight";
     private static final boolean INVERT_FR_MOTOR = true;
     private static final boolean INVERT_FL_MOTOR = false;
     private static final boolean INVERT_BR_MOTOR = true;
@@ -27,7 +28,7 @@ public class PathfinderTest extends LinearOpMode {
     private static final boolean INVERT_ENCODER_R = false;
     private static final boolean INVERT_ENCODER_B = false;
 
-    private static final double SPEED = 1.0;
+    private static final double SPEED = 0.3;
     private static final double WHEEL_DIAMETER = 1.5;
     private static final double OFFSET_LEFT = 7.83;
     private static final double OFFSET_RIGHT = 7.83;
@@ -41,10 +42,11 @@ public class PathfinderTest extends LinearOpMode {
     private static final DynamicArray<HeadingPoint> RECTANGLE =
             new DynamicArray<>(
                     new HeadingPoint(0.1, 0.1, 0),
-                    new HeadingPoint(20.2, 0.2, 0),
-                    new HeadingPoint(20.3, 20.3, 0),
-                    new HeadingPoint(0.4, 20.4, 0),
-                    new HeadingPoint(0.5, 0.5, 0)
+                    new HeadingPoint(0.1, 5, 45)
+//                    new HeadingPoint(20.2, 0.2, 45),
+//                    new HeadingPoint(20.3, 20.3, 90),
+//                    new HeadingPoint(0.4, 20.4, 135),
+//                    new HeadingPoint(0.5, 0.5, 180)
             );
 
     private void initializeMotors() {
@@ -52,6 +54,18 @@ public class PathfinderTest extends LinearOpMode {
         flMotor = hardwareMap.dcMotor.get(NAME_FL_MOTOR);
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
+        frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        brMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        blMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        brMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        blMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void initializePathfinder() {

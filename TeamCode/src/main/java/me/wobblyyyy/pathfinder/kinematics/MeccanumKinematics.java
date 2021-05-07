@@ -81,7 +81,7 @@ public class MeccanumKinematics {
 
     /**
      * Create a new {@code MeccanumKinematics} instance that calculates
-     * power values and transformations based on the inputted points. 
+     * power values and transformations based on the inputted points.
      * These points are relative to the center of the robot.
      *
      * @param posFl the position of one of the meccanum modules. This
@@ -129,7 +129,7 @@ public class MeccanumKinematics {
                 0,
                 transform.getX(),
                 transform.getY(),
-                0
+                transform.getTurn()
         );
         SimpleMatrix moduleMatrix = kinematicsBackwards.mult(speedVector);
         return new MeccanumState(

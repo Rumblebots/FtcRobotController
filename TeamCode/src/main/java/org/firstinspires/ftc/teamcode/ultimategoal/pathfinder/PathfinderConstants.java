@@ -55,6 +55,10 @@ public class PathfinderConstants {
         flMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         brMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         blMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        flMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        brMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        blMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public static void initializePathfinder(Supplier<Boolean> shouldRun) {
