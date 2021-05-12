@@ -213,14 +213,24 @@ public class MeccanumDrive implements Drive {
         // direction and force.
         state.normalizeFromMaxUnderOne();
 
+        double multiplier = Math.abs(Math.min((Math.hypot(
+                transform.getX(),
+                transform.getY()
+        ) / Math.hypot(1, 1)) + (transform.getTurn() / 2), 1));
+
         // Set the normalized states to each of the motors.
         // In this case, we assume that the user is not controlling the robot.
         // If they are, sucks for them. That reminds me, actually:
         // TODO implement user and non-user meccanum control
-        fl().setPower(state.flPower(), false);
-        fr().setPower(state.frPower(), false);
-        bl().setPower(state.blPower(), false);
-        br().setPower(state.brPower(), false);
+        System.out.println("TURN: " + transform.getTurn());
+        System.out.println("FL: " +(state.flPower() * multiplier));
+        System.out.println("FR: " +(state.frPower() * multiplier));
+        System.out.println("BL: " +(state.blPower() * multiplier));
+        System.out.println("BR: " +(state.brPower() * multiplier));
+        fl().setPower(state.flPower() * multiplier, false);
+        fr().setPower(state.frPower() * multiplier, false);
+        bl().setPower(state.blPower() * multiplier, false);
+        br().setPower(state.brPower() * multiplier, false);
     }
 
     /**

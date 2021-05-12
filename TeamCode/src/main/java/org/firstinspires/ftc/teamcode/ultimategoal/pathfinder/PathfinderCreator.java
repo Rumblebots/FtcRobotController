@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.config.PathfinderConfig;
 import me.wobblyyyy.pathfinder.config.PathfinderConfigurationBuilder;
+import me.wobblyyyy.pathfinder.control.ProportionalController;
 import me.wobblyyyy.pathfinder.followers.Followers;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.maps.ftc.EmptyFTC;
@@ -82,6 +83,7 @@ public class PathfinderCreator {
                 .drivetrainSwapXY(true)
                 .drivetrainInvertX(true)
                 .tickerThreadOnStop(shouldRun)
+                .turnController(new ProportionalController(-1/45.0))
                 .build();
 
         return new Pathfinder(config);

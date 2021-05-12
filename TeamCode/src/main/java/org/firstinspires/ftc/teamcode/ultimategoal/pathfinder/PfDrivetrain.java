@@ -9,8 +9,8 @@ import me.wobblyyyy.pathfinder.drive.MeccanumDrive;
  * @see MeccanumDrive
  */
 public class PfDrivetrain extends MeccanumDrive {
-    private static final double WHEELBASE_GAP_X = 403.5;
-    private static final double WHEELBASE_GAP_Y = 336.0;
+    private static final double WHEELBASE_GAP_X = 403.5 * 0.0393;
+    private static final double WHEELBASE_GAP_Y = 336.0 * 0.0393;
 
     public PfDrivetrain(PfMotors motors) {
         super(

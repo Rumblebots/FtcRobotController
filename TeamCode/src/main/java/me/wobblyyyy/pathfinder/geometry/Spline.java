@@ -32,6 +32,9 @@ package me.wobblyyyy.pathfinder.geometry;
 import me.wobblyyyy.edt.Arrayable;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.edt.StaticArray;
+import me.wobblyyyy.pathfinder.geometry.Angle;
+import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.math.SplineInterpolator;
 import me.wobblyyyy.pathfinder.trajectory.Segment;
 

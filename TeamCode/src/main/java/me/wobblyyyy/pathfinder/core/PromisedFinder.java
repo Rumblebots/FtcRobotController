@@ -29,8 +29,9 @@
 
 package me.wobblyyyy.pathfinder.core;
 
-import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.geometry.Point;
+
+import me.wobblyyyy.edt.DynamicArray;
 
 /**
  * A partially uncompleted (or partially completed) pathfinder state.

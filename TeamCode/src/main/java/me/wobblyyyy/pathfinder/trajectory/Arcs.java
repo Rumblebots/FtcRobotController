@@ -31,11 +31,11 @@ package me.wobblyyyy.pathfinder.trajectory;
 
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.edt.StaticArray;
-import me.wobblyyyy.pathfinder.geometry.Distance;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.geometry.Spline;
 import me.wobblyyyy.pathfinder.math.functional.PointRotation;
+import me.wobblyyyy.pathfinder.geometry.Distance;
 
 /**
  * A utility class, containing a wide variety of points, midpoints, splines,

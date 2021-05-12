@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
+import me.wobblyyyy.pathfinder.config.PathfinderConfigurationBuilder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderCreator;
@@ -19,10 +20,13 @@ public class PathfinderTest extends LinearOpMode {
     private static final String NAME_BR_MOTOR = "backRight";
     private static final String NAME_BL_MOTOR = "frontLeft";
 //    private static final String NAME_BR_MOTOR = "frontRight";
-    private static final boolean INVERT_FR_MOTOR = true;
+//    private static final boolean INVERT_FR_MOTOR = true;
     private static final boolean INVERT_FL_MOTOR = false;
+    private static final boolean INVERT_FR_MOTOR = false;
+//    private static final boolean INVERT_FL_MOTOR = true;
     private static final boolean INVERT_BR_MOTOR = true;
-    private static final boolean INVERT_BL_MOTOR = false;
+//        private static final boolean INVERT_BR_MOTOR = false;
+    private static final boolean INVERT_BL_MOTOR = true;
 
     private static final boolean INVERT_ENCODER_L = true;
     private static final boolean INVERT_ENCODER_R = false;
@@ -42,7 +46,8 @@ public class PathfinderTest extends LinearOpMode {
     private static final DynamicArray<HeadingPoint> RECTANGLE =
             new DynamicArray<>(
                     new HeadingPoint(0.1, 0.1, 0),
-                    new HeadingPoint(0.1, 5, 45)
+                    new HeadingPoint(0.1, .5, 45),
+                    new HeadingPoint(0.1, 15, 45)
 //                    new HeadingPoint(20.2, 0.2, 45),
 //                    new HeadingPoint(20.3, 20.3, 90),
 //                    new HeadingPoint(0.4, 20.4, 135),
@@ -91,6 +96,7 @@ public class PathfinderTest extends LinearOpMode {
                 OFFSET_BACK,
                 this::opModeIsActive
         );
+//        pathfinder = PathfinderConfigurationBuilder.newConfiguration().
     }
 
     @Override
@@ -102,6 +108,7 @@ public class PathfinderTest extends LinearOpMode {
 
         Thread.sleep(500);
 
+        pathfinder.tick();
         pathfinder.followPath(RECTANGLE);
 
         while (opModeIsActive()) {

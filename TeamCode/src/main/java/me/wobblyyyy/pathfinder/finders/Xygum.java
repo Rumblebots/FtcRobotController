@@ -31,9 +31,9 @@ package me.wobblyyyy.pathfinder.finders;
 
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.config.PathfinderConfig;
+import me.wobblyyyy.pathfinder.util.MapTools;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.map.Map;
-import me.wobblyyyy.pathfinder.util.MapTools;
 import org.xguzm.pathfinding.Heuristic;
 import org.xguzm.pathfinding.grid.GridCell;
 import org.xguzm.pathfinding.grid.NavigationGrid;
