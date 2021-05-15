@@ -29,8 +29,6 @@
 
 package me.wobblyyyy.pathfinder.util;
 
-import me.wobblyyyy.pathfinder.tracking.swerve.SwerveChassisTracker;
-
 /**
  * Convert between drivetrains and trackers.
  *

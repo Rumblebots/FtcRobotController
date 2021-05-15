@@ -83,7 +83,7 @@ public class PathfinderCreator {
                 .drivetrainSwapXY(true)
                 .drivetrainInvertX(true)
                 .tickerThreadOnStop(shouldRun)
-                .turnController(new ProportionalController(-1/45.0))
+                .turnController(new ProportionalController(-1/180.0))
                 .build();
 
         return new Pathfinder(config);

@@ -81,7 +81,7 @@ public class MeccanumKinematics {
 
     /**
      * Create a new {@code MeccanumKinematics} instance that calculates
-     * power values and transformations based on the inputted points.
+     * power values and transformations based on the inputted points. 
      * These points are relative to the center of the robot.
      *
      * @param posFl the position of one of the meccanum modules. This
@@ -143,11 +143,6 @@ public class MeccanumKinematics {
                 moduleMatrix.get(2, 0),
                 moduleMatrix.get(3, 0)
         );
-        System.out.println("SFR: " + state.frPower());
-        System.out.println("SFL: " + state.flPower());
-        System.out.println("SBR: " + state.brPower());
-        System.out.println("SBL: " + state.blPower());
-
         state.normalizeFromMaxUnderOne();
         return state;
     }

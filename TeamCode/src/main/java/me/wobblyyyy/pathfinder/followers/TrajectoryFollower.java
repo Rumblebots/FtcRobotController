@@ -31,13 +31,13 @@ package me.wobblyyyy.pathfinder.followers;
 
 import me.wobblyyyy.pathfinder.config.PathfinderConfig;
 import me.wobblyyyy.pathfinder.geometry.Angle;
+import me.wobblyyyy.pathfinder.geometry.Distance;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.kinematics.RTransform;
 import me.wobblyyyy.pathfinder.robot.Drive;
 import me.wobblyyyy.pathfinder.robot.Odometry;
 import me.wobblyyyy.pathfinder.trajectory.Trajectory;
-import me.wobblyyyy.pathfinder.geometry.Distance;
 
 /**
  * A lovely follower designed for trajectories. Normal followers, although

@@ -33,7 +33,7 @@ import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.edt.StaticArray;
 import me.wobblyyyy.pathfinder.followers.Follower;
 import me.wobblyyyy.pathfinder.robot.Drive;
-//import me.wobblyyyy.pathfinder.util.BcThread;
+import me.wobblyyyy.pathfinder.util.BcThread;
 
 import java.util.ArrayList;
 
@@ -167,7 +167,7 @@ public class FollowerExecutor {
                  * This should improve performance by freeing up some
                  * processing time.
                  */
-//                BcThread.spin();
+                BcThread.spin();
 
                 executor.run();
             }
@@ -475,7 +475,7 @@ public class FollowerExecutor {
              * unimportant in terms of the CPU - the CPU can prioritize other,
              * more important operation, over this right here.
              */
-//            BcThread.spin();
+            BcThread.spin();
         } while (!isEmpty());
     }
 

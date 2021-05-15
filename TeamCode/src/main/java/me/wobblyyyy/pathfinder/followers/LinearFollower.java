@@ -31,12 +31,12 @@ package me.wobblyyyy.pathfinder.followers;
 
 import me.wobblyyyy.pathfinder.control.Controller;
 import me.wobblyyyy.pathfinder.geometry.AngleUtils;
+import me.wobblyyyy.pathfinder.geometry.Distance;
+import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.kinematics.RTransform;
 import me.wobblyyyy.pathfinder.robot.Drive;
-import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.robot.Odometry;
-import me.wobblyyyy.pathfinder.geometry.Distance;
 
 /**
  * The most basic path follower. This follower can follow a single segment
@@ -249,8 +249,10 @@ public class LinearFollower implements Follower {
                 end,
                 0.5
         )) {
-            drive.drive(RTransform.ZERO);
-            return true;
+            if (getAngleDelta() < 10) {
+                drive.drive(RTransform.ZERO);
+                return true;
+            }
         }
 
         /*

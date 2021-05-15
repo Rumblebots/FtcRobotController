@@ -30,7 +30,6 @@
 package me.wobblyyyy.pathfinder.kinematics;
 
 import me.wobblyyyy.edt.Arrayable;
-import me.wobblyyyy.edt.StaticArray;
 import me.wobblyyyy.pathfinder.geometry.Angle;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.time.Time;

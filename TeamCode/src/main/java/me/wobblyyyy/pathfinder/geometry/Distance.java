@@ -29,9 +29,6 @@
 
 package me.wobblyyyy.pathfinder.geometry;
 
-import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
-import me.wobblyyyy.pathfinder.geometry.Point;
-
 /**
  * Utility class for measuring distance.
  *
