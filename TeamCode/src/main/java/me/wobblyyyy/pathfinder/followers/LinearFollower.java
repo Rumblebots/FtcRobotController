@@ -254,6 +254,9 @@ public class LinearFollower implements Follower {
         )) {
             if (getAngleDelta() < 7) {
                 drive.drive(RTransform.ZERO);
+                System.out.println("HEADING DONE: " + getAngleDelta());
+                System.out.println("CPOS DONE: " + odometry.getPos());
+
                 return true;
             }
         }
