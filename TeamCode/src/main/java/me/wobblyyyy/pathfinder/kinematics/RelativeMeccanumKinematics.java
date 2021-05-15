@@ -90,9 +90,11 @@ public class RelativeMeccanumKinematics {
         double movementAngle = AngleUtils.fixDeg(Math.toDegrees(Math.atan2(
                 transform.getY(),
                 transform.getX()
-        )) + 270);
+        )) + 0);
         double magnitude = Math.min(Math.hypot(transform.getX(), transform.getY()), 1);
-
+        System.out.println("MOVE ANGLE: " + movementAngle);
+        System.out.println("MAGNITUDE: " + magnitude);
+        System.out.println("TURN VAL: " + transform.getTurn());
         double fl = calculatePower(movementAngle, ANGLES[0], magnitude);
         double fr = calculatePower(movementAngle, ANGLES[1], magnitude);
         double bl = calculatePower(movementAngle, ANGLES[2], magnitude);
@@ -102,6 +104,11 @@ public class RelativeMeccanumKinematics {
         fr -= transform.getTurn();
         bl += transform.getTurn();
         br -= transform.getTurn();
+
+        System.out.println("FLPOW: " + fl);
+        System.out.println("FRPOW: " + fr);
+        System.out.println("BRPOW: " + br);
+        System.out.println("BLPOW: " + bl);
 
         MeccanumState state = new MeccanumState(fl, fr, bl, br);
         state.normalizeFromMaxUnderOne();

@@ -22,17 +22,17 @@ public class PathfinderTest extends LinearOpMode {
 //    private static final String NAME_BR_MOTOR = "frontRight";
 //    private static final boolean INVERT_FR_MOTOR = true;
     private static final boolean INVERT_FL_MOTOR = false;
-    private static final boolean INVERT_FR_MOTOR = false;
+    private static final boolean INVERT_FR_MOTOR = true;
 //    private static final boolean INVERT_FL_MOTOR = true;
     private static final boolean INVERT_BR_MOTOR = true;
 //        private static final boolean INVERT_BR_MOTOR = false;
-    private static final boolean INVERT_BL_MOTOR = true;
+    private static final boolean INVERT_BL_MOTOR = false;
 
     private static final boolean INVERT_ENCODER_L = true;
     private static final boolean INVERT_ENCODER_R = false;
     private static final boolean INVERT_ENCODER_B = false;
 
-    private static final double SPEED = 0.3;
+    private static final double SPEED = 0.7;
     private static final double WHEEL_DIAMETER = 1.5;
     private static final double OFFSET_LEFT = 7.83;
     private static final double OFFSET_RIGHT = 7.83;
@@ -46,8 +46,8 @@ public class PathfinderTest extends LinearOpMode {
     private static final DynamicArray<HeadingPoint> RECTANGLE =
             new DynamicArray<>(
                     new HeadingPoint(0.1, 0.1, 0),
-                    new HeadingPoint(0.1, .5, 45),
-                    new HeadingPoint(0.1, 15, 45)
+                    new HeadingPoint(0.1, 15, 0),
+                    new HeadingPoint(0.1, 20, -90)
 //                    new HeadingPoint(20.2, 0.2, 45),
 //                    new HeadingPoint(20.3, 20.3, 90),
 //                    new HeadingPoint(0.4, 20.4, 135),

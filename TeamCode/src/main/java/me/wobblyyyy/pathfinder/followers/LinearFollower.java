@@ -30,10 +30,7 @@
 package me.wobblyyyy.pathfinder.followers;
 
 import me.wobblyyyy.pathfinder.control.Controller;
-import me.wobblyyyy.pathfinder.geometry.AngleUtils;
-import me.wobblyyyy.pathfinder.geometry.Distance;
-import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
-import me.wobblyyyy.pathfinder.geometry.Point;
+import me.wobblyyyy.pathfinder.geometry.*;
 import me.wobblyyyy.pathfinder.kinematics.RTransform;
 import me.wobblyyyy.pathfinder.robot.Drive;
 import me.wobblyyyy.pathfinder.robot.Odometry;
@@ -216,10 +213,16 @@ public class LinearFollower implements Follower {
          * can be a positive or negative number as well, the robot can turn
          * in either direction. Lovely, isn't it?
          */
-        RTransform transformation = new RTransform(
-                Point.ZERO,                               // origin
-                target,                                   // "target" point
-                turnController.calculate(getAngleDelta()) // turn rate
+//        RTransform transformation = new RTransform(
+//                Point.ZERO,                               // origin
+//                target,                                   // "target" point
+//                turnController.calculate(getAngleDelta()) // turn rate
+//        );
+        RTransform transformation = RTransform.fromGyro(
+                Point.ZERO,
+                target,
+                turnController.calculate(getAngleDelta()),
+                Angle.fromDegrees(odometry.getPos().getHeading())
         );
 
         drive.drive(transformation);
@@ -249,7 +252,7 @@ public class LinearFollower implements Follower {
                 end,
                 0.5
         )) {
-            if (getAngleDelta() < 10) {
+            if (getAngleDelta() < 7) {
                 drive.drive(RTransform.ZERO);
                 return true;
             }
