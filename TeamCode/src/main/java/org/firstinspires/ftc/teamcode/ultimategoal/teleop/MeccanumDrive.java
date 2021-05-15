@@ -22,10 +22,10 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
-    private static final HeadingPoint TARGET_A = HeadingPoint.ZERO;
-    private static final HeadingPoint TARGET_B = HeadingPoint.ZERO;
-    private static final HeadingPoint TARGET_X = HeadingPoint.ZERO;
-    private static final HeadingPoint TARGET_Y = HeadingPoint.ZERO;
+    private static final HeadingPoint TARGET_A = new HeadingPoint(10, 10, 0);
+    private static final HeadingPoint TARGET_B = new HeadingPoint(10, 10, 45);
+    private static final HeadingPoint TARGET_X = new HeadingPoint(10, 10, 90);
+    private static final HeadingPoint TARGET_Y = new HeadingPoint(10, 10, 135);
 
     private boolean aPressedLast = false;
     private boolean bPressedLast = false;
@@ -36,6 +36,8 @@ public class MeccanumDrive extends OpMode {
     private boolean bPressed = false;
     private boolean xPressed = false;
     private boolean yPressed = false;
+
+    private boolean isPathfinderActive = false;
 
     private HeadingPoint target = HeadingPoint.ZERO;
     private boolean mustReset = false;
@@ -158,8 +160,8 @@ public class MeccanumDrive extends OpMode {
                         target
                 ));
 
-                // pathfinder shouldn't reset anymore
-                mustReset = false;
+                // pathfinder is now active
+                isPathfinderActive = true;
             } else {
                 // clear the pathfinder, recurse
                 pathfinder.getManager().getExecutor().clear();
@@ -167,6 +169,7 @@ public class MeccanumDrive extends OpMode {
                 updatePathfinder();
             }
         }
+        isPathfinderActive = !pathfinder.getManager().getExecutor().isEmpty();
     }
 
     @Override
@@ -198,30 +201,32 @@ public class MeccanumDrive extends OpMode {
         }
 
         // update and tick the pathfinder
-        updatePathfinder();
         pathfinder.tick();
+        updatePathfinder();
 
-        if (gamepad1.left_trigger != 0 && gamepad1.right_trigger == 0) {
-            multiplier = 0.25;
-        } else {
-            multiplier = 0.5;
+        if (!isPathfinderActive) {
+            if (gamepad1.left_trigger != 0 && gamepad1.right_trigger == 0) {
+                multiplier = 0.25;
+            } else {
+                multiplier = 0.5;
+            }
+
+            if (gamepad1.left_trigger == 0 && gamepad1.right_trigger != 0) {
+                multiplier = 1;
+            } else {
+                multiplier = 0.5;
+            }
+
+            double fr = -gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+            double br = -gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+            double fl = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+            double bl = gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+
+            frontRight.setPower(fr * multiplier);
+            backRight.setPower(br * multiplier);
+            frontLeft.setPower(fl * multiplier);
+            backLeft.setPower(bl * multiplier);
         }
-
-        if (gamepad1.left_trigger == 0 && gamepad1.right_trigger != 0) {
-            multiplier = 1;
-        } else {
-            multiplier = 0.5;
-        }
-
-        double fr = -gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
-        double br = -gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
-        double fl = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
-        double bl = gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
-        frontRight.setPower(fr * multiplier);
-        backRight.setPower(br * multiplier);
-        frontLeft.setPower(fl * multiplier);
-        backLeft.setPower(bl * multiplier);
-
 
 //        if (bottomSensor.red() > 1000) {
 //            moveUpper = false;

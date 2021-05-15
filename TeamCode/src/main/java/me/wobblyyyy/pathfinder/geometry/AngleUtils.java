@@ -126,7 +126,7 @@ public class AngleUtils {
             // from each of them and fixing the degree measure. This ensures
             // that the maximum possible angle delta is +- 0.
             current = fixDeg(current - 180);
-            target = fixDeg(current - 180);
+            target = fixDeg(target - 180);
         }
 
         // Initialize delta. Very fun.
