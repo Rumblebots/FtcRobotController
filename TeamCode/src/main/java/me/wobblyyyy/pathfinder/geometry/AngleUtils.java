@@ -121,7 +121,7 @@ public class AngleUtils {
 
         // If the target is more than 180 degrees away from the current, we
         // know we can further optimize the angle delta.
-        if (target - current > 180) {
+        if (target - current > 180 || current - target > 180) {
             // Re-calculate the current and target points by subtracting 180
             // from each of them and fixing the degree measure. This ensures
             // that the maximum possible angle delta is +- 0.
