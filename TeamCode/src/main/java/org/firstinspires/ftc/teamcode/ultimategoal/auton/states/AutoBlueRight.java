@@ -1,19 +1,20 @@
 /****
  * Made by Tejas Mehta
- * Made on Saturday, May 15, 2021
- * File Name: AutoRedLeft
+ * Made on Tuesday, May 18, 2021
+ * File Name: AutoBlueRight
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton.states*/
 package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
 
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "AutonBlueLeft - States", group = "Main Autonomous")
-public class AutoBlueLeft extends GenericBlue {
+@Autonomous(name = "AutonBlueRight - States", group = "Main Autonomous")
 
+public class AutoBlueRight extends GenericBlue {
     @Override
     public void runOpMode() throws InterruptedException {
         System.out.println("RUNNING");
-        setXOffset(12);
+        setXOffset(35);
         super.runOpMode();
     }
 }

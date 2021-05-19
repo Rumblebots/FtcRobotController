@@ -62,6 +62,7 @@ public class AutoRobot {
         wobbleArm = hardwareMap.get(DcMotor.class, "wobbleArm");
         webcam.init(hardwareMap);
         webcam.activateTfod();
+        pusher.setPosition(1);
     }
 
     private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
@@ -70,7 +71,8 @@ public class AutoRobot {
         Pathfinder pathfinder = PathfinderConstants.getPathfinder();
         pathfinder.getManager().getExecutor().clear();
         PathfinderConstants.getChassisTracker().setOffset(new Point(xOffset, 0));
-        pathfinder.open();
+//        pathfinder.open();
+        pathfinder.tick();
         return pathfinder;
     }
 
@@ -78,7 +80,7 @@ public class AutoRobot {
         return wobblePoint;
     }
 
-    void goToPoint(HeadingPoint point) {
+    void goToPoint(HeadingPoint point, Supplier<Boolean> shouldRun, int timeout) {
         HeadingPoint currentPoint = pathfinder.getPosition();
         if (currentPoint == null) {
             currentPoint = new HeadingPoint(xOffset, 0, 0);
@@ -89,7 +91,18 @@ public class AutoRobot {
                 currentPoint,
                 point
         ));
-        pathfinder.tickUntil();
+        double xDist = Math.abs(pathfinder.getPosition().getX() - point.getX());
+        double yDist = Math.abs(pathfinder.getPosition().getY() - point.getY());
+        double headingDiff = Math.abs(pathfinder.getPosition().getHeading() - point.getHeading());
+        long startTime = System.currentTimeMillis();
+        while ((xDist >= 3 || yDist >= 3 || headingDiff >= 5) && shouldRun.get()
+                && (System.currentTimeMillis() - startTime) < (timeout * 1000L)
+                && !pathfinder.getManager().getExecutor().isEmpty()) {
+            pathfinder.tick();
+            xDist = Math.abs(pathfinder.getPosition().getX() - point.getX());
+            yDist = Math.abs(pathfinder.getPosition().getY() - point.getY());
+            headingDiff = Math.abs(pathfinder.getPosition().getHeading() - point.getHeading());
+        }
         System.out.println("NEW HEADING PT: " + pathfinder.getPosition());
     }
 
@@ -115,18 +128,20 @@ public class AutoRobot {
         }
     }
 
-    public void shoot(Consumer<Integer> sleep) {
-        flywheel1.setPower(1.0);
-        flywheel2.setPower(1.0);
-        sleep.accept(1000);
+    public void setShooterPower(double pow) {
+        flywheel1.setPower(pow);
+        flywheel2.setPower(pow);
         loader.setPosition((180.0-36.0)/180.0);
-        sleep.accept(500);
+    }
+
+    public void shoot(Consumer<Integer> sleep) {
+        System.out.println("SHOOTING");
         pusher.setPosition(1);
-        sleep.accept(1000);
+        sleep.accept(500);
         pusher.setPosition(0.6);
         sleep.accept(500);
         pusher.setPosition(1.0);
-        sleep.accept(1000);
+        sleep.accept(500);
     }
 
 }

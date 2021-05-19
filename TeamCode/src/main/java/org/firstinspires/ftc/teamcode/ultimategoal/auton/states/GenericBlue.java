@@ -33,10 +33,19 @@ public class GenericBlue extends LinearOpMode {
         }, hardwareMap, telemetry, xOffset, this::opModeIsActive);
         robot.runVision(this::isStarted);
         waitForStart();
-        robot.goToPoint(robot.getWobblePoint());
-        robot.goToPoint(new HeadingPoint(20, 60, -90));
-//        robot.shoot(this::sleep);
-//        robot.goToPoint(new HeadingPoint(20, 60, -215));
-//        robot.goToPoint(new HeadingPoint(20, 60, -230));
+        robot.goToPoint(robot.getWobblePoint(), this::opModeIsActive, 15);
+        robot.goToPoint(new HeadingPoint(20, 57, 165), this::opModeIsActive, 10);
+        robot.setShooterPower(1.0);
+        sleep(500);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(20, 57, 159), this::opModeIsActive, 3);
+        sleep(200);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(20, 57, 154), this::opModeIsActive, 3);
+        sleep(200);
+        robot.shoot(this::sleep);
+        robot.setShooterPower(0.0);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(20, 65, 154), this::opModeIsActive, 3);
     }
 }
