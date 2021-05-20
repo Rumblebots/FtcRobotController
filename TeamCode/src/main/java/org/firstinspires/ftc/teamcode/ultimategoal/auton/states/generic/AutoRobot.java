@@ -140,6 +140,9 @@ public class AutoRobot {
     }
 
     public void setShooterPower(double pow) {
+        for(VoltageSensor voltageSensor : hardwareMap.voltageSensor) {
+            System.out.println("Voltage: " + voltageSensor.getVoltage());
+        }
         flywheel1.setPower(pow);
         flywheel2.setPower(pow);
         System.out.println(flywheel1.getVelocity());
