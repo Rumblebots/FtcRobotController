@@ -5,10 +5,8 @@
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton.states*/
 package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
@@ -25,8 +23,8 @@ import java.util.function.Supplier;
 public class AutoRobot {
 
     WebcamTFOD webcam = new WebcamTFOD();
-    DcMotor flywheel1;
-    DcMotor flywheel2;
+    DcMotorEx flywheel1;
+    DcMotorEx flywheel2;
     Servo loader;
     Servo pusher;
     DcMotor wobbleArm;
@@ -52,8 +50,7 @@ public class AutoRobot {
     }
 
     private void initialize() {
-        flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
-        flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
+        initializeShooterMotor();
         loader = hardwareMap.get(Servo.class, "loader");
         pusher = hardwareMap.get(Servo.class, "pusher");
         wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
@@ -63,6 +60,20 @@ public class AutoRobot {
         webcam.init(hardwareMap);
         webcam.activateTfod();
         pusher.setPosition(1);
+    }
+    private void initializeShooterMotor() {
+        flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
+        flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
+        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel1.setMotorType(flywheel1Config);
+
+        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel2.setMotorType(flywheel2Config);
+
+        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
@@ -131,6 +142,7 @@ public class AutoRobot {
     public void setShooterPower(double pow) {
         flywheel1.setPower(pow);
         flywheel2.setPower(pow);
+        System.out.println(flywheel1.getVelocity());
         loader.setPosition((180.0-36.0)/180.0);
     }
 
