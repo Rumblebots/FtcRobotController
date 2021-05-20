@@ -3,7 +3,7 @@
  * Made on Saturday, May 15, 2021
  * File Name: AutoRobot
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton.states*/
-package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
+package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;

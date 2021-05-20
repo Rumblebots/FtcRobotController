@@ -7,6 +7,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericBlue;
 
 @Autonomous(name = "AutonBlueRight - States", group = "Main Autonomous")
 

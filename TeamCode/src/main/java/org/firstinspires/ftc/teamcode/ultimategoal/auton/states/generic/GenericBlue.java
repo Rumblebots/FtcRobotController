@@ -3,7 +3,7 @@
  * Made on Saturday, May 15, 2021
  * File Name: GenericBlue
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton.states*/
-package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
+package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
