@@ -84,16 +84,19 @@ public class AutoRobot {
     private void initializeShooterMotor() {
         flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
         flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
-//        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
-//        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
-//        flywheel1.setMotorType(flywheel1Config);
-//
-//        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
-//        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
-//        flywheel2.setMotorType(flywheel2Config);
+        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel1.setMotorType(flywheel1Config);
 
-//        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel2.setMotorType(flywheel2Config);
+
+        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
     private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
@@ -172,7 +175,9 @@ public class AutoRobot {
             System.out.println("Voltage: " + voltageSensor.getVoltage());
         }
         System.out.println("Velocity: " +flywheel1.getVelocity());
-        flywheel1.setPower(pow);
+        System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
+        System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
+        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
         flywheel2.setPower(pow);
         loader.setPosition((180.0-36.0)/180.0);
     }
