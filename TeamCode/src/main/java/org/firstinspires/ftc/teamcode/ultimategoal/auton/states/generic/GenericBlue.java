@@ -34,6 +34,7 @@ public class GenericBlue extends LinearOpMode {
         robot.runVision(this::isStarted);
         waitForStart();
         robot.goToPoint(robot.getWobblePoint(), this::opModeIsActive, 15);
+        robot.dropGoal();
         robot.goToPoint(new HeadingPoint(20, 57, 165), this::opModeIsActive, 10);
         robot.setShooterPower(1.0);
         sleep(500);

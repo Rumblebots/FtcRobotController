@@ -29,6 +29,7 @@ public class AutoRobot {
     Servo pusher;
     DcMotor wobbleArm;
     Servo wobbleDropper;
+    Servo webcamServo;
     DigitalChannel armOut;
     DigitalChannel armIn;
 
@@ -57,23 +58,42 @@ public class AutoRobot {
         armOut = hardwareMap.get(DigitalChannel.class, "armOut");
         armIn = hardwareMap.get(DigitalChannel.class, "armIn");
         wobbleArm = hardwareMap.get(DcMotor.class, "wobbleArm");
+        webcamServo = hardwareMap.get(Servo.class, "webcamServo");
+        setWebcamPos();
         webcam.init(hardwareMap);
         webcam.activateTfod();
         pusher.setPosition(1);
     }
+
+    private void setWebcamPos() {
+        if (xOffset < 90) {
+            if (xOffset < 20) {
+                webcamServo.setPosition(0.5);
+            } else {
+                webcamServo.setPosition(60/180.0);
+            }
+        } else {
+            if (xOffset < 120) {
+                webcamServo.setPosition(145/180.0);
+            } else {
+                webcamServo.setPosition(45/180.0);
+            }
+        }
+    }
+
     private void initializeShooterMotor() {
         flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
         flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
-        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
-        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel1.setMotorType(flywheel1Config);
+//        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+//        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel1.setMotorType(flywheel1Config);
+//
+//        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+//        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel2.setMotorType(flywheel2Config);
 
-        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
-        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel2.setMotorType(flywheel2Config);
-
-        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
@@ -139,13 +159,21 @@ public class AutoRobot {
         }
     }
 
+    public void dropGoal() {
+        while (armOut.getState()) {
+            wobbleArm.setPower(0.3);
+        }
+        wobbleArm.setPower(0.0);
+        wobbleDropper.setPosition(1.0);
+    }
+
     public void setShooterPower(double pow) {
         for(VoltageSensor voltageSensor : hardwareMap.voltageSensor) {
             System.out.println("Voltage: " + voltageSensor.getVoltage());
         }
+        System.out.println("Velocity: " +flywheel1.getVelocity());
         flywheel1.setPower(pow);
         flywheel2.setPower(pow);
-        System.out.println(flywheel1.getVelocity());
         loader.setPosition((180.0-36.0)/180.0);
     }
 
