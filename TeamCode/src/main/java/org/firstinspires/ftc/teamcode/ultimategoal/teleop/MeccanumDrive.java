@@ -148,6 +148,16 @@ public class MeccanumDrive extends OpMode {
 
     @Override
     public void loop() {
+        HeadingPoint robotPos = pathfinder.getPosition();
+        Point circleCenter = new Point(48, 72);
+        telemetry.addData("current", robotPos);
+        telemetry.addData("center", circleCenter);
+        telemetry.addData("closest point", RadiusFinder.closestPoint(
+                robotPos,
+                circleCenter,
+                24
+        ));
+
         updateButtons(
                 gamepad1.a,
                 gamepad1.b,
