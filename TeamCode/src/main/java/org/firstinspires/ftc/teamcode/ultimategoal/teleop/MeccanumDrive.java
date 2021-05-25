@@ -38,52 +38,32 @@ public class MeccanumDrive extends OpMode {
     private boolean yPressed = false;
 
     private boolean isPathfinderActive = false;
-
     private HeadingPoint target = HeadingPoint.ZERO;
     private boolean mustReset = false;
 
     Pathfinder pathfinder;
-
     DcMotor frontRight;
-
     DcMotor frontLeft;
-
     DcMotor backRight;
-
     DcMotor backLeft;
-
     DcMotor flywheel1;
-
     DcMotor flywheel2;
-
     DcMotor intake;
-
     CRServo intakeServo;
-
     CRServo upperIntakeServo;
-
     Servo intakeMover;
-
     Servo loader;
-
     Servo pusher;
-
     DcMotor wobbleArm;
-
     Servo wobbleDropper;
 
     //    ColorSensor bottomSensor;
 //    ColorSensor topSensor;
     double multiplier = 0.5;
-
     Toggle t = new Toggle();
-
     Toggle loadToggle = new Toggle();
-
     Toggle pushToggle = new Toggle();
-
     Toggle wobbleToggle = new Toggle();
-
     //    boolean moveUpper = true;
     ShooterThread shooterThread;
 
@@ -150,22 +130,16 @@ public class MeccanumDrive extends OpMode {
 
     public void updatePathfinder() {
         if (mustReset) {
-            // if the pathfinder needs to reset its path
             if (pathfinder.getManager().getExecutor().isEmpty()) {
-                // if the exec is empty we need to regen a path
                 pathfinder.followPath(new DynamicArray<>(
                         HeadingPoint.pointOrIfNullZero(
                                 pathfinder.getPosition()
                         ),
                         target
                 ));
-
-                // pathfinder is now active
-                isPathfinderActive = true;
+                mustReset = false;
             } else {
-                // clear the pathfinder, recurse
                 pathfinder.getManager().getExecutor().clear();
-
                 updatePathfinder();
             }
         }
@@ -174,11 +148,6 @@ public class MeccanumDrive extends OpMode {
 
     @Override
     public void loop() {
-        // update each of the button's press status
-        // buttons can only be "pressed" once
-        // they're only considered to be "pressed" the first execution of
-        // the loop when they're pressed, afterwards they can be reset and
-        // re-pressed if that makes sense???
         updateButtons(
                 gamepad1.a,
                 gamepad1.b,
@@ -186,23 +155,23 @@ public class MeccanumDrive extends OpMode {
                 gamepad1.y
         );
 
-        // if any of the buttons are pressed we have to reset
         if (aPressed || bPressed || xPressed || yPressed) mustReset = true;
 
-        // set the pathfinder's target based on whatever point is used
-        if (aPressed) {
-            target = TARGET_A;
-        } else if (bPressed) {
-            target = TARGET_B;
-        } else if (xPressed) {
-            target = TARGET_X;
-        } else if (yPressed) {
-            target = TARGET_Y;
+        if (mustReset && !isPathfinderActive) {
+            if (aPressed) {
+                target = TARGET_A;
+            } else if (bPressed) {
+                target = TARGET_B;
+            } else if (xPressed) {
+                target = TARGET_X;
+            } else if (yPressed) {
+                target = TARGET_Y;
+            }
         }
 
-        // update and tick the pathfinder
-        pathfinder.tick();
+        // TODO 5/25/2021 does order matter here
         updatePathfinder();
+        pathfinder.tick();
 
         if (!isPathfinderActive) {
             if (gamepad1.left_trigger != 0 && gamepad1.right_trigger == 0) {
@@ -258,29 +227,11 @@ public class MeccanumDrive extends OpMode {
             wobbleArm.setPower(0);
         }
 
-
-//        if (gamepad2.b) {
-//            loadToggle.onPress();
-//        } else {
-//            loadToggle.onRelease();
-//        }
-
         if (gamepad2.right_bumper) {
             pusher.setPosition(0.65);
         } else {
             pusher.setPosition(1);
         }
-//
-//        if (pushToggle.state) {
-//        } else {
-//            pusher.setPosition(1);
-//        }
-
-//        if (loadToggle.state) {
-//            loader.setPosition((180.0-36.0)/180.0);
-//        } else {
-//            loader.setPosition(1);
-//        }
 
         if (gamepad2.left_trigger > gamepad2.right_trigger && gamepad2.left_trigger > 0.3) {
             intake.setPower(1.0);
@@ -292,9 +243,6 @@ public class MeccanumDrive extends OpMode {
             intake.setPower(-1);
             intakeServo.setPower(-0.8);
             upperIntakeServo.setPower(-0.8);
-//            if (moveUpper) {
-//                System.out.println("SHOULD BE MOVING");
-//            }
         } else {
             loader.setPosition((180.0 - 36.0) / 180.0);
             intake.setPower(0);
