@@ -9,7 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
@@ -46,8 +48,8 @@ public class MeccanumDrive extends OpMode {
     DcMotor frontLeft;
     DcMotor backRight;
     DcMotor backLeft;
-    DcMotor flywheel1;
-    DcMotor flywheel2;
+    DcMotorEx flywheel1;
+    DcMotorEx flywheel2;
     DcMotor intake;
     CRServo intakeServo;
     CRServo upperIntakeServo;
@@ -73,8 +75,9 @@ public class MeccanumDrive extends OpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
-        flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
+        initializeFlywheels();
+//        flywheel1 = hardwareMap.get(DcMotor.class, "flywheel1");
+//        flywheel2 = hardwareMap.get(DcMotor.class, "flywheel2");
         intake = hardwareMap.get(DcMotor.class, "intakeMotor");
         intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
         upperIntakeServo = hardwareMap.get(CRServo.class, "upperIntakeServo");
@@ -85,10 +88,10 @@ public class MeccanumDrive extends OpMode {
         wobbleDropper = hardwareMap.get(Servo.class, "wobbleDropper");
 //        bottomSensor = hardwareMap.get(ColorSensor.class, "bottomSensor");
 //        topSensor = hardwareMap.get(ColorSensor.class, "topSensor");
-        flywheel1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        flywheel2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        flywheel2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         t.state = false;
         loadToggle.state = false;
         pushToggle.state = false;
@@ -106,6 +109,24 @@ public class MeccanumDrive extends OpMode {
         PathfinderConstants.initializePathfinder(() -> false);
         pathfinder = PathfinderConstants.getPathfinder();
         PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
+    }
+
+    void initializeFlywheels() {
+        flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
+        flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
+        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel1.setMotorType(flywheel1Config);
+
+        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+        flywheel2.setMotorType(flywheel2Config);
+
+        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
     public boolean pressed(boolean current,
@@ -272,8 +293,12 @@ public class MeccanumDrive extends OpMode {
 //                System.out.println("BAD");
 //            }
 //            spinToSpeed(neededVel);
-            flywheel1.setPower(1.0);
-            flywheel2.setPower(1.0);
+            flywheel1.setVelocity(2800);
+            flywheel2.setVelocity(2800);
+            System.out.println("CVEL: " + flywheel1.getVelocity());
+            System.out.println("CVEL2z: " + flywheel2.getVelocity());
+            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
+            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
         } else {
             flywheel1.setPower(0);
             flywheel2.setPower(0);
