@@ -25,13 +25,13 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
     // first power shot (left)
-    private static final HeadingPoint TARGET_A = new HeadingPoint(56, 144, 0);
+    private static final HeadingPoint TARGET_A = new HeadingPoint(48 + 5.5, 144, 0);
 
     // second power shot (middle)
-    private static final HeadingPoint TARGET_B = new HeadingPoint(64, 144, 45);
+    private static final HeadingPoint TARGET_B = new HeadingPoint(48 + 5.5 + 7.5, 144, 45);
 
     // third power shot (right)
-    private static final HeadingPoint TARGET_X = new HeadingPoint(72, 10, 90);
+    private static final HeadingPoint TARGET_X = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 90);
 
     // TODO
     private static final HeadingPoint TARGET_Y = new HeadingPoint(10, 10, 135);
@@ -115,7 +115,7 @@ public class MeccanumDrive extends OpMode {
         PathfinderConstants.initializeMotors(hardwareMap);
         PathfinderConstants.initializePathfinder(() -> false);
         pathfinder = PathfinderConstants.getPathfinder();
-        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
+//        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
     }
 
     void initializeFlywheels() {

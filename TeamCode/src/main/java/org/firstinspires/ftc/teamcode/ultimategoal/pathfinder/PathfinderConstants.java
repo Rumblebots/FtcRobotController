@@ -48,6 +48,7 @@ public class PathfinderConstants {
         flMotor = hardwareMap.dcMotor.get(NAME_FL_MOTOR);
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
+        resetMotors();
     }
 
     public static void resetMotors() {
@@ -88,7 +89,7 @@ public class PathfinderConstants {
                 OFFSET_BACK,
                 shouldRun
         );
-        PathfinderCreator.getChassisTracker().setOffset(new Point(9, 9));
+        getChassisTracker().setOffset(new Point(9, 9));
     }
 
     public static PfDrivetrain getDriveTrain() {

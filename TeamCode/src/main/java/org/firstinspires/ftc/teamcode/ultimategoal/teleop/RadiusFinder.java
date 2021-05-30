@@ -9,7 +9,7 @@ public class RadiusFinder {
     /**
      * distance between the center of the robot and the shooter
      */
-    private static final double DISTANCE_CENTER_SHOOTER = 48.0;
+    private static final double DISTANCE_CENTER_SHOOTER = 84.0;
 
     /**
      * get closest point
@@ -64,10 +64,10 @@ public class RadiusFinder {
                 DISTANCE_CENTER_SHOOTER
         );
 
-        double desiredAngle = Point.angleOfDeg(
+        double desiredAngle = AngleUtils.fixDeg(Point.angleOfDeg(
                 closestPoint,
                 targetPos
-        );
+        ) + 90 - Math.atan(6.0/84));
 
         return closestPoint.withHeading(desiredAngle);
     }
