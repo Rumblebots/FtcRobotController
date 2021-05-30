@@ -199,7 +199,10 @@ public class LinearFollower implements Follower {
                         odometry.getPos(),                // current position
                         end                               // target position
                 ),                                        // angle A to B
-                coefficient                               // speed to move at
+                Distance.getDistance(
+                        odometry.getPos(),
+                        end
+                ) < 2 ? coefficient / 2 : coefficient
         );
 
         /*
@@ -254,8 +257,6 @@ public class LinearFollower implements Follower {
         )) {
             if (getAngleDelta() < 5) {
                 drive.drive(RTransform.ZERO);
-                System.out.println("HEADING DONE: " + getAngleDelta());
-                System.out.println("CPOS DONE: " + odometry.getPos());
 
                 return true;
             }
