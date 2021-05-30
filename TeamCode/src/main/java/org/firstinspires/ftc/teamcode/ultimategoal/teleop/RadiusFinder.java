@@ -43,4 +43,32 @@ public class RadiusFinder {
         );
         return Point.angleOfDeg(adjusted, powerShotPos);
     }
+
+    /**
+     * Get the closest target point? Hopefully? Not sure? Maybe?
+     *
+     * @param currentPos the robot's position
+     * @param targetPos  the power shot position
+     * @return the closest point on the circle
+     */
+    public static HeadingPoint closestTargetPoint(Point currentPos,
+                                                  Point targetPos) {
+        double angle = Point.angleOfDeg(
+                currentPos,
+                targetPos
+        );
+
+        Point closestPoint = Distance.inDirection(
+                targetPos,
+                angle,
+                DISTANCE_CENTER_SHOOTER
+        );
+
+        double desiredAngle = Point.angleOfDeg(
+                closestPoint,
+                targetPos
+        );
+
+        return closestPoint.withHeading(desiredAngle);
+    }
 }

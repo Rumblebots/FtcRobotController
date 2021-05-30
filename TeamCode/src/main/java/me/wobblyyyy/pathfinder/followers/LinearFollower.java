@@ -29,6 +29,7 @@
 
 package me.wobblyyyy.pathfinder.followers;
 
+import android.annotation.SuppressLint;
 import me.wobblyyyy.pathfinder.control.Controller;
 import me.wobblyyyy.pathfinder.geometry.*;
 import me.wobblyyyy.pathfinder.kinematics.RTransform;
@@ -202,7 +203,7 @@ public class LinearFollower implements Follower {
                 Distance.getDistance(
                         odometry.getPos(),
                         end
-                ) < 2 ? coefficient / 2 : coefficient
+                ) < 2 ? coefficient / 1.5 : coefficient
         );
 
         /*
@@ -262,10 +263,6 @@ public class LinearFollower implements Follower {
             }
         }
 
-        /*
-         * If we aren't done, however, return false, indicating that the
-         * follower should continue its execution.
-         */
         return false;
     }
 
@@ -289,6 +286,7 @@ public class LinearFollower implements Follower {
      *
      * @return the {@code LinearFollower} in {@code String} form.
      */
+    @SuppressLint("DefaultLocale")
     @Override
     public String toString() {
         return String.format(

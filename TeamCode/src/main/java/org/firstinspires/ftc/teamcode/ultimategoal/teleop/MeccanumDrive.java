@@ -24,9 +24,16 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
-    private static final HeadingPoint TARGET_A = new HeadingPoint(10, 10, 0);
-    private static final HeadingPoint TARGET_B = new HeadingPoint(10, 10, 45);
-    private static final HeadingPoint TARGET_X = new HeadingPoint(10, 10, 90);
+    // first power shot (left)
+    private static final HeadingPoint TARGET_A = new HeadingPoint(56, 144, 0);
+
+    // second power shot (middle)
+    private static final HeadingPoint TARGET_B = new HeadingPoint(64, 144, 45);
+
+    // third power shot (right)
+    private static final HeadingPoint TARGET_X = new HeadingPoint(72, 10, 90);
+
+    // TODO
     private static final HeadingPoint TARGET_Y = new HeadingPoint(10, 10, 135);
 
     private boolean aPressedLast = false;
@@ -190,17 +197,29 @@ public class MeccanumDrive extends OpMode {
 
         if (mustReset && !isPathfinderActive) {
             if (aPressed) {
-                target = TARGET_A;
+                target = RadiusFinder.closestTargetPoint(
+                        pathfinder.getPosition(),
+                        TARGET_A
+                );
             } else if (bPressed) {
-                target = TARGET_B;
+                target = RadiusFinder.closestTargetPoint(
+                        pathfinder.getPosition(),
+                        TARGET_B
+                );
             } else if (xPressed) {
-                target = TARGET_X;
+                target = RadiusFinder.closestTargetPoint(
+                        pathfinder.getPosition(),
+                        TARGET_X
+                );
             } else if (yPressed) {
-                target = TARGET_Y;
+                // shouldn't really be used, we only have 3 power shots
+                target = RadiusFinder.closestTargetPoint(
+                        pathfinder.getPosition(),
+                        TARGET_Y
+                );
             }
         }
 
-        // TODO 5/25/2021 does order matter here
         updatePathfinder();
         pathfinder.tick();
 
