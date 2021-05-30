@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
+    // TODO fix power show points?
     // first power shot (left)
     private static final HeadingPoint TARGET_A = new HeadingPoint(48 + 5.5, 144, 0);
 

@@ -64,6 +64,7 @@ public class RadiusFinder {
                 DISTANCE_CENTER_SHOOTER
         );
 
+        // TODO Fix angle
         double desiredAngle = AngleUtils.fixDeg(Point.angleOfDeg(
                 closestPoint,
                 targetPos
