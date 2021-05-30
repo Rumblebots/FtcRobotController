@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.geometry.Point;
 import me.wobblyyyy.pathfinder.tracking.threeWheel.ThreeWheelChassisTracker;
 
 import java.util.function.Supplier;
@@ -47,6 +48,9 @@ public class PathfinderConstants {
         flMotor = hardwareMap.dcMotor.get(NAME_FL_MOTOR);
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
+    }
+
+    public static void resetMotors() {
         frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -84,6 +88,7 @@ public class PathfinderConstants {
                 OFFSET_BACK,
                 shouldRun
         );
+        PathfinderCreator.getChassisTracker().setOffset(new Point(9, 9));
     }
 
     public static PfDrivetrain getDriveTrain() {

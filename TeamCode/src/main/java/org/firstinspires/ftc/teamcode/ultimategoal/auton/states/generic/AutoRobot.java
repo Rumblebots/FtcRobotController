@@ -101,10 +101,11 @@ public class AutoRobot {
 
     private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
         PathfinderConstants.initializeMotors(hardwareMap);
+        PathfinderConstants.resetMotors();
         PathfinderConstants.initializePathfinder(shouldRun);
         Pathfinder pathfinder = PathfinderConstants.getPathfinder();
         pathfinder.getManager().getExecutor().clear();
-        PathfinderConstants.getChassisTracker().setOffset(new Point(xOffset, 0));
+        PathfinderConstants.getChassisTracker().setOffset(new Point(xOffset, 9));
 //        pathfinder.open();
         pathfinder.tick();
         return pathfinder;
