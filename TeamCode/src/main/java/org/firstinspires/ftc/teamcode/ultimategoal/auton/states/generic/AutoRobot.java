@@ -137,6 +137,8 @@ public class AutoRobot {
             yDist = Math.abs(pathfinder.getPosition().getY() - point.getY());
             headingDiff = Math.abs(pathfinder.getPosition().getHeading() - point.getHeading());
         }
+        pathfinder.stopRobot();
+        pathfinder.getManager().getExecutor().clear();
         System.out.println("NEW HEADING PT: " + pathfinder.getPosition());
     }
 
@@ -162,12 +164,18 @@ public class AutoRobot {
         }
     }
 
-    public void dropGoal() {
+    public void dropGoal(Consumer<Integer> sleep) {
         while (armOut.getState()) {
             wobbleArm.setPower(0.3);
         }
         wobbleArm.setPower(0.0);
         wobbleDropper.setPosition(1.0);
+//        sleep.accept(500);
+//        wobbleDropper.setPosition(0.0);
+//        while (armIn.getState()) {
+//            wobbleArm.setPower(-0.3);
+//        }
+//        wobbleArm.setPower(0.0);
     }
 
     public void setShooterPower(double pow) {
@@ -178,7 +186,8 @@ public class AutoRobot {
         System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
         System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
         flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
-        flywheel2.setPower(pow);
+//        flywheel2.setPower(pow);
+        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
         loader.setPosition((180.0-36.0)/180.0);
     }
 

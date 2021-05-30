@@ -22,7 +22,7 @@ public class RadiusFinder {
     public static Point closestPoint(Point point,
                                      Point center,
                                      double radius) {
-        double angleToPoint = Point.angleOfDeg(point, center);
+        double angleToPoint = Point.angleOfDeg(Point.pointOrIfNullZero(point), center);
         return Distance.inDirection(center, angleToPoint, radius);
     }
 
