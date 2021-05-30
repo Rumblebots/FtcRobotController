@@ -68,15 +68,15 @@ public class AutoRobot {
     private void setWebcamPos() {
         if (xOffset < 90) {
             if (xOffset < 20) {
-                webcamServo.setPosition(0.5);
+                webcamServo.setPosition(0.45);
             } else {
-                webcamServo.setPosition(60/180.0);
+                webcamServo.setPosition(0.26);
             }
         } else {
             if (xOffset < 120) {
-                webcamServo.setPosition(145/180.0);
+                webcamServo.setPosition(0.45);
             } else {
-                webcamServo.setPosition(45/180.0);
+                webcamServo.setPosition(0.26);
             }
         }
     }
@@ -185,9 +185,9 @@ public class AutoRobot {
         System.out.println("Velocity: " +flywheel1.getVelocity());
         System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
         System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
-        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
+        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
 //        flywheel2.setPower(pow);
-        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
+        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
         loader.setPosition((180.0-36.0)/180.0);
     }
 

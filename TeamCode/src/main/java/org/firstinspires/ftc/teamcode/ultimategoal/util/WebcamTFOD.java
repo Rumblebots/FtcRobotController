@@ -19,8 +19,7 @@ public class WebcamTFOD {
     public void activateTfod() {
         if (tfod != null) {
             tfod.activate();
-
-//            tfod.setZoom(2.5, 16/9.0);
+            tfod.setZoom(1.5, 16/9.0);
         }
     }
     public List<Recognition> getUpdatedRecognitions() {
@@ -43,14 +42,15 @@ public class WebcamTFOD {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+//        vuforia.
     }
     /**
      * Initialize the TensorFlow Object Detection engine.
      */
     private void initTfod(HardwareMap hardwareMap) {
-//        int tfodMonitorViewId = .getIdentifier(
+//        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
 //                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(0);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfodParameters.minResultConfidence = 0.6f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);

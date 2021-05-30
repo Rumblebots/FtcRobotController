@@ -27,9 +27,9 @@ public class GenericBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[]{
-                new HeadingPoint(20, 113, 0),
-                new HeadingPoint(45, 93, 0),
-                new HeadingPoint(20, 73, 0),
+                new HeadingPoint(20, 118, 180),
+                new HeadingPoint(40, 94, 180),
+                new HeadingPoint(20, 70, 180),
         }, hardwareMap, telemetry, xOffset, this::opModeIsActive);
         robot.runVision(this::isStarted);
         waitForStart();
@@ -37,14 +37,14 @@ public class GenericBlue extends LinearOpMode {
         sleep(500);
         robot.dropGoal(this::sleep);
         sleep(500);
-        robot.goToPoint(new HeadingPoint(21, 56, 156), this::opModeIsActive, 10);
-        robot.setShooterPower(1.0);
+        robot.goToPoint(new HeadingPoint(21, 56, 158), this::opModeIsActive, 10);
+        robot.setShooterPower(0.90);
         sleep(500);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(21, 56, 152), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(21, 56, 153), this::opModeIsActive, 3);
         sleep(200);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(21, 56, 146), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(21, 56, 148), this::opModeIsActive, 3);
         sleep(200);
         robot.shoot(this::sleep);
         robot.setShooterPower(0.0);

@@ -256,13 +256,19 @@ public class PathfinderManager {
     public DynamicArray<Point> getWaypointPath(DynamicArray<HeadingPoint> points) {
         DynamicArray<DynamicArray<Point>> paths = new DynamicArray<>();
 
-        points.itr().forEach(point -> {
-            if (points.itr().next() != null) {
-                HeadingPoint q = points.itr().next();
-                DynamicArray<Point> pqPath = getPath(point, q);
-                if (pqPath.size() > 0) paths.add(pqPath);
-            }
-        });
+//        points.itr().forEach(point -> {
+//            if (points.itr().next() != null) {
+//                HeadingPoint q = points.itr().next();
+//                DynamicArray<Point> pqPath = getPath(point, q);
+//                if (pqPath.size() > 0) paths.add(pqPath);
+//            }
+//        });
+
+        for (int i = 0; i < points.size()-1; i++) {
+            HeadingPoint q = points.get(i+1);
+            DynamicArray<Point> pqPath = getPath(points.get(i), q);
+            if (pqPath.size() > 0) paths.add(pqPath);
+        }
 
         return merge(paths);
     }
