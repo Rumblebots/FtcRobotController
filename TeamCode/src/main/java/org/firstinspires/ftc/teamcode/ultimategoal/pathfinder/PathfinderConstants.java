@@ -36,7 +36,7 @@ public class PathfinderConstants {
     private static final double WHEEL_DIAMETER = 1.5;
     private static final double OFFSET_LEFT = 7.83;
     private static final double OFFSET_RIGHT = 7.83;
-    private static final double OFFSET_BACK = 1.0;
+    private static final double OFFSET_BACK = 1.75;
 
     private static DcMotor frMotor;
     private static DcMotor flMotor;
