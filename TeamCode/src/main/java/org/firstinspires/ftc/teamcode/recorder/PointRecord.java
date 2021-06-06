@@ -4,9 +4,10 @@ import com.google.gson.Gson;
 import me.wobblyyyy.pathfinder.math.GearRatio;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 
-public class PointRecord extends HashMap<Double, PointSnapshot> {
+public class PointRecord extends LinkedHashMap<Double, PointSnapshot> {
     private final Supplier<Double> time;
     private final Supplier<PointSnapshot> point;
 

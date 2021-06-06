@@ -59,5 +59,6 @@ public class GenericRed extends LinearOpMode {
         sleep(200);
         robot.goToPoint(new HeadingPoint(110, 74, 180), this::opModeIsActive, 3);
         sleep(1000);
+        robot.stopRecording();
     }
 }

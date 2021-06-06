@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.recorder;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class PathfinderRecorder {
@@ -10,16 +13,21 @@ public class PathfinderRecorder {
     private TimedRecord record;
     private Thread recorderThread;
     private boolean isRecording;
+    ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
 
     public PathfinderRecorder(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;
 
         record = new TimedRecord(this::snapshot);
-        recorderThread = new Thread(() -> {
-            while (this.isRecording) {
-                record.record();
-            }
-        });
+        exec.scheduleAtFixedRate(() -> {
+            record.record();
+        }, 0, 100, TimeUnit.MILLISECONDS);
+//        recorderThread = new Thread(() -> {
+//            while (this.isRecording) {
+//                System.out.println("Recording...");
+//                record.record();
+//            }
+//        });
         this.isRecording = false;
     }
 
@@ -27,12 +35,13 @@ public class PathfinderRecorder {
         reset();
         if (!isRecording) {
             this.isRecording = true;
-            recorderThread.start();
+//            recorderThread.start();
         }
     }
 
     public void stop() {
         this.isRecording = false;
+        exec.shutdown();
     }
 
     public void reset() {

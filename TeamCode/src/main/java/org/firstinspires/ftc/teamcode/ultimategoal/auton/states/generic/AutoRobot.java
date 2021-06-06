@@ -118,6 +118,13 @@ public class AutoRobot {
         return pathfinder;
     }
 
+    void stopRecording() {
+        System.out.println("STOPPING");
+        recorder.stop();
+        System.out.println("MAIN EXPORT");
+        recorder.export();
+    }
+
     HeadingPoint getWobblePoint() {
         return wobblePoint;
     }

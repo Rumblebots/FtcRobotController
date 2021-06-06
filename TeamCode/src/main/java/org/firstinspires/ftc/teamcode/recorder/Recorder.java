@@ -11,20 +11,24 @@ public class Recorder extends PathfinderRecorder {
     public Recorder(Pathfinder pathfinder,
                     String name) {
         super(pathfinder);
+        System.out.println("RECORDER CONST");
         this.name = name;
         this.exporter = new Exporter(name);
     }
 
     public void start(Supplier<Boolean> shouldRun) {
-        (new Thread(() -> {
-            this.start();
-            while (shouldRun.get());
-            this.stop();
-            this.export();
-        })).start();
+        System.out.println("SHOULDRUN: " + shouldRun.get());
+        super.start();
+//        (new Thread(() -> {
+//            this.start();
+//            while (true);
+//            this.stop();
+//            this.export();
+//        })).start();
     }
 
     public void export() {
+        System.out.println("EXPORTING");
         this.export(this.exporter::write);
     }
 }

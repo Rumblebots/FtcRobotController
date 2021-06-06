@@ -13,8 +13,9 @@ public class Exporter {
     }
 
     public void write(String data) {
+        System.out.println("WRITING");
         File file = AppUtil.getInstance().getSettingsFile(name);
-        System.out.printf("file path: " + file.getPath());
+        System.out.println("file path: " + file.getPath());
         ReadWriteFile.writeFile(file, data);
     }
 }
