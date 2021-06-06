@@ -36,18 +36,18 @@ public class AutoRobot {
     final HeadingPoint[] potentialWobblePoints;
     final HardwareMap hardwareMap;
     final Telemetry telemetry;
-    final double xOffset;
+    final Point offset;
     HeadingPoint wobblePoint;
     Pathfinder pathfinder;
 
-    AutoRobot(HeadingPoint[] potentialWobblePoints, HardwareMap hardwareMap, Telemetry telemetry, double xOffset, Supplier<Boolean> shouldRun) {
+    AutoRobot(HeadingPoint[] potentialWobblePoints, HardwareMap hardwareMap, Telemetry telemetry, Point offset, Supplier<Boolean> shouldRun) {
         this.potentialWobblePoints = potentialWobblePoints;
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
-        this.xOffset = xOffset;
+        this.offset = offset;
         wobblePoint = potentialWobblePoints[2];
         initialize();
-        this.pathfinder = initializePathfinder(xOffset, shouldRun);
+        this.pathfinder = initializePathfinder(offset, shouldRun);
     }
 
     private void initialize() {
@@ -66,14 +66,14 @@ public class AutoRobot {
     }
 
     private void setWebcamPos() {
-        if (xOffset < 90) {
-            if (xOffset < 20) {
+        if (offset.getX() < 90) {
+            if (offset.getX() < 20) {
                 webcamServo.setPosition(0.45);
             } else {
                 webcamServo.setPosition(0.26);
             }
         } else {
-            if (xOffset < 120) {
+            if (offset.getX() < 120) {
                 webcamServo.setPosition(0.45);
             } else {
                 webcamServo.setPosition(0.26);
@@ -99,13 +99,13 @@ public class AutoRobot {
         System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
-    private Pathfinder initializePathfinder(double xOffset, Supplier<Boolean> shouldRun) {
+    private Pathfinder initializePathfinder(Point offset, Supplier<Boolean> shouldRun) {
         PathfinderConstants.initializeMotors(hardwareMap);
         PathfinderConstants.resetMotors();
         PathfinderConstants.initializePathfinder(shouldRun);
         Pathfinder pathfinder = PathfinderConstants.getPathfinder();
         pathfinder.getManager().getExecutor().clear();
-        PathfinderConstants.getChassisTracker().setOffset(new Point(xOffset, 9));
+        PathfinderConstants.getChassisTracker().setOffset(offset);
 //        pathfinder.open();
         pathfinder.tick();
         return pathfinder;
@@ -118,7 +118,7 @@ public class AutoRobot {
     void goToPoint(HeadingPoint point, Supplier<Boolean> shouldRun, int timeout) {
         HeadingPoint currentPoint = pathfinder.getPosition();
         if (currentPoint == null) {
-            currentPoint = new HeadingPoint(xOffset, 0, 0);
+            currentPoint = new HeadingPoint(offset.getX(), offset.getY(), 0);
         }
         System.out.println("HEADING PT: " + currentPoint);
         System.out.println("WOBBLE PT: " + point);
@@ -130,7 +130,7 @@ public class AutoRobot {
         double yDist = Math.abs(pathfinder.getPosition().getY() - point.getY());
         double headingDiff = Math.abs(pathfinder.getPosition().getHeading() - point.getHeading());
         long startTime = System.currentTimeMillis();
-        while ((xDist >= 3 || yDist >= 3 || headingDiff >= 5) && shouldRun.get()
+        while ((xDist >= 3 || yDist >= 3 || headingDiff >= 3) && shouldRun.get()
                 && (System.currentTimeMillis() - startTime) < (timeout * 1000L)
                 && !pathfinder.getManager().getExecutor().isEmpty()) {
             pathfinder.tick();
@@ -170,13 +170,21 @@ public class AutoRobot {
             wobbleArm.setPower(0.3);
         }
         wobbleArm.setPower(0.0);
-        wobbleDropper.setPosition(1.0);
+        wobbleDropper.setPosition(0.5);
 //        sleep.accept(500);
 //        wobbleDropper.setPosition(0.0);
 //        while (armIn.getState()) {
 //            wobbleArm.setPower(-0.3);
 //        }
 //        wobbleArm.setPower(0.0);
+    }
+
+    public void bringArmIn() {
+        while (armIn.getState()) {
+            wobbleArm.setPower(-0.3);
+        }
+        wobbleArm.setPower(0.0);
+        wobbleDropper.setPosition(0.0);
     }
 
     public void setShooterPower(double pow) {

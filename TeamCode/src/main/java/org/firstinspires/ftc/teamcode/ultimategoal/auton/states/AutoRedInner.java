@@ -7,15 +7,16 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericBlue;
+import me.wobblyyyy.pathfinder.geometry.Point;
+import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericRed;
 
-@Autonomous(name = "AutonBlueRight - States", group = "Main Autonomous")
+@Autonomous(name = "AutonRedInner - States", group = "Main Autonomous")
 
-public class AutoBlueRight extends GenericBlue {
+public class AutoRedInner extends GenericRed {
     @Override
     public void runOpMode() throws InterruptedException {
         System.out.println("RUNNING");
-        setXOffset(35);
+        setOffset(new Point(96, 9));
         super.runOpMode();
     }
 }

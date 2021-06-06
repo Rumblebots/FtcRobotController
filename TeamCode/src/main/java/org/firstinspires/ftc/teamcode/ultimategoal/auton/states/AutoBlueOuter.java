@@ -1,21 +1,21 @@
 /****
  * Made by Tejas Mehta
- * Made on Tuesday, May 18, 2021
- * File Name: AutoBlueRight
+ * Made on Saturday, May 15, 2021
+ * File Name: AutoRedLeft
  * Package: org.firstinspires.ftc.teamcode.ultimategoal.auton.states*/
 package org.firstinspires.ftc.teamcode.ultimategoal.auton.states;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericRed;
+import me.wobblyyyy.pathfinder.geometry.Point;
+import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericBlue;
 
-@Autonomous(name = "AutonRedRight - States", group = "Main Autonomous")
+@Autonomous(name = "AutonBlueOuter- States", group = "Main Autonomous")
+public class AutoBlueOuter extends GenericBlue {
 
-public class AutoRedRight extends GenericRed {
     @Override
     public void runOpMode() throws InterruptedException {
         System.out.println("RUNNING");
-        setXOffset(109);
+        setOffset(new Point(48, 9));
         super.runOpMode();
     }
 }

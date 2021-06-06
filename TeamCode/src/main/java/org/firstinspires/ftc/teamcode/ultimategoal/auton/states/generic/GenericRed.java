@@ -7,10 +7,11 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import me.wobblyyyy.pathfinder.geometry.Point;
 
 public class GenericRed extends LinearOpMode {
 
-    private double xOffset;
+    private Point offset;
 
 //    GenericBlue(double xOffset) {
 //     this.xOffset = xOffset;
@@ -20,32 +21,43 @@ public class GenericRed extends LinearOpMode {
 //        xOffset = 15;
 //    }
 
-    public void setXOffset(double xOffset) {
-        this.xOffset = xOffset;
+    public void setOffset(Point offset) {
+        this.offset = offset;
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        AutoRobot robot = new AutoRobot(new HeadingPoint[]{
-                new HeadingPoint(124, 113, 0),
-                new HeadingPoint(99, 93, 0),
-                new HeadingPoint(124, 73, 0),
-        }, hardwareMap, telemetry, xOffset, this::opModeIsActive);
+        AutoRobot robot = new AutoRobot(new HeadingPoint[] {
+                new HeadingPoint(132, 120, 90),
+                new HeadingPoint(128, 100, 180),
+                new HeadingPoint(128, 72, 90),
+        }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
         waitForStart();
-        robot.goToPoint(robot.getWobblePoint(), this::opModeIsActive, 15);
-        robot.goToPoint(new HeadingPoint(124, 57, 195), this::opModeIsActive, 10);
-        robot.setShooterPower(1.0);
+        robot.goToPoint(new HeadingPoint(96, 64, 180), this::opModeIsActive, 10);
+        robot.setShooterPower(0.9);
+        sleep(200);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(96, 65, -175), this::opModeIsActive, 3);
+        sleep(200);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(96, 65, -170), this::opModeIsActive, 3);
         sleep(500);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(124, 57, 201), this::opModeIsActive, 3);
-        sleep(200);
-        robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(124, 57, 206), this::opModeIsActive, 3);
-        sleep(200);
-        robot.shoot(this::sleep);
         robot.setShooterPower(0.0);
+        sleep(500);
+        robot.goToPoint(robot.getWobblePoint(), this::opModeIsActive, 10);
+        sleep(500);
+        robot.dropGoal(this::sleep);
+        sleep(500);
+        robot.bringArmIn();
+        robot.goToPoint(new HeadingPoint(robot.getWobblePoint().getX(), robot.getWobblePoint().getY()-10, robot.getWobblePoint().getHeading()), this::opModeIsActive, 3);
         sleep(200);
-        robot.goToPoint(new HeadingPoint(124, 65, 206), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(110, 74, 180), this::opModeIsActive, 3);
+        sleep(1000);
     }
 }
