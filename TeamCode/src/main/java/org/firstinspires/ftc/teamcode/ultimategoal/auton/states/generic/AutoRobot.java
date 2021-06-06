@@ -74,7 +74,7 @@ public class AutoRobot {
 
     private void setWebcamPos() {
         if (offset.getX() < 90) {
-            if (offset.getX() < 20) {
+            if (offset.getX() < 30) {
                 webcamServo.setPosition(0.45);
             } else {
                 webcamServo.setPosition(0.26);

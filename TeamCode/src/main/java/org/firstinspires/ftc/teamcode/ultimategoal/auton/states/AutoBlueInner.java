@@ -16,7 +16,7 @@ public class AutoBlueInner extends GenericBlue {
     @Override
     public void runOpMode() throws InterruptedException {
         System.out.println("RUNNING");
-        setOffset(new Point(24, 9));
+        setOffset(new Point(48, 9));
         super.runOpMode();
     }
 }
