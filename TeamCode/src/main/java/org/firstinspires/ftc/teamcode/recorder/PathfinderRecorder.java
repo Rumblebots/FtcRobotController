@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 public class PathfinderRecorder {
     private Pathfinder pathfinder;
-    private TimedRecord record;
+    public TimedRecord record;
     private Thread recorderThread;
     private boolean isRecording;
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -21,7 +21,7 @@ public class PathfinderRecorder {
         record = new TimedRecord(this::snapshot);
         exec.scheduleAtFixedRate(() -> {
             record.record();
-        }, 0, 100, TimeUnit.MILLISECONDS);
+        }, 0, 50, TimeUnit.MILLISECONDS);
 //        recorderThread = new Thread(() -> {
 //            while (this.isRecording) {
 //                System.out.println("Recording...");
@@ -49,7 +49,7 @@ public class PathfinderRecorder {
     }
 
     public PointSnapshot snapshot() {
-        HeadingPoint point = pathfinder.getPosition();
+        HeadingPoint point = HeadingPoint.pointOrIfNullZero(pathfinder.getPosition());
 
         return new PointSnapshot(
                 point.getX(),

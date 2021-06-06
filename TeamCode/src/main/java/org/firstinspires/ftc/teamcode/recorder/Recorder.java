@@ -27,6 +27,10 @@ public class Recorder extends PathfinderRecorder {
 //        })).start();
     }
 
+    public void record() {
+        record.record();
+    }
+
     public void export() {
         System.out.println("EXPORTING");
         this.export(this.exporter::write);

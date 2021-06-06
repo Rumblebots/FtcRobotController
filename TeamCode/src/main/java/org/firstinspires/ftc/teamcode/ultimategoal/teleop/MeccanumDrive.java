@@ -16,6 +16,7 @@ import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
+import org.firstinspires.ftc.teamcode.recorder.Recorder;
 import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderConstants;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
@@ -27,17 +28,17 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
-    private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
-    private static final HeadingPoint BLUE_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 0);
-    private static final HeadingPoint BLUE_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5, 144, 0);
+    private static final HeadingPoint RED_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
+    private static final HeadingPoint RED_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 0);
+    private static final HeadingPoint RED_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5, 144, 0);
 
-    private static final HeadingPoint RED_PS_L = new HeadingPoint(48 + 5.5 + 2 - 24, 144, 0);
-    private static final HeadingPoint RED_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 - 24, 144, 0);
-    private static final HeadingPoint RED_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5 - 24, 144, 0);
+    private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2 + 24, 144, 0);
+    private static final HeadingPoint BLUE_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 24, 144, 0);
+    private static final HeadingPoint BLUE_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5 + 24, 144, 0);
 
-    private static final HeadingPoint BLUE_HI = new HeadingPoint(48, 144, 0);
+    private static final HeadingPoint BLUE_HI = new HeadingPoint(120, 144 + 24 - 8, 0);
     // todo fix this lol
-    private static final HeadingPoint RED_HI = new HeadingPoint(48, 144, 0);
+    private static final HeadingPoint RED_HI = new HeadingPoint(48 - 12, 144 + 24 - 8, 0);
 
     private boolean aPressedLast = false;
     private boolean bPressedLast = false;
@@ -88,6 +89,8 @@ public class MeccanumDrive extends OpMode {
 
     //    boolean moveUpper = true;
     ShooterThread shooterThread;
+    private Recorder recorder;
+    private boolean hasStopped = false;
 
     /**
      * initialize everything
@@ -142,13 +145,19 @@ public class MeccanumDrive extends OpMode {
         pathfinder = PathfinderConstants.getPathfinder();
 //        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
 
-        if (gamepad1.a) {
+        if (gamepad1.dpad_up) {
             this.color = Color.BLUE;
         }
 
-        if (gamepad1.b) {
+        if (gamepad1.dpad_down) {
             this.color = Color.RED;
         }
+
+        recorder = new Recorder(
+                pathfinder,
+                "manual.json"
+        );
+        recorder.start(() -> true);
     }
 
     void initializeFlywheels() {
@@ -209,6 +218,16 @@ public class MeccanumDrive extends OpMode {
 
     @Override
     public void loop() {
+//        recorder.record();
+
+        if (!hasStopped) {
+            if (gamepad1.dpad_right) {
+                recorder.stop();
+                recorder.export();
+                hasStopped = true;
+            }
+        }
+
         updateButtons(
                 gamepad1.a,
                 gamepad1.b,
@@ -392,6 +411,7 @@ public class MeccanumDrive extends OpMode {
     @Override
     public void stop() {
         super.stop();
+//        recorder.stop();
         shooterThread.stopThread();
     }
 
