@@ -102,7 +102,7 @@ public class ThreeWheelChassisTracker implements Tracker {
     /**
      * The odometry's offset.
      */
-    private Point offset = Point.ZERO;
+    private HeadingPoint offset = HeadingPoint.ZERO;
 
     /**
      * Create a new ThreeWheelChassisTracker instance.
@@ -149,6 +149,10 @@ public class ThreeWheelChassisTracker implements Tracker {
         );
     }
 
+    public void setOffset(Point offset) {
+        this.offset = offset.withHeading();
+    }
+
     /**
      * Set the robot's offset. This offset is applied to the reported
      * positions from the tracker every time it's updated. If the robot has
@@ -157,21 +161,26 @@ public class ThreeWheelChassisTracker implements Tracker {
      *
      * @param offset the robot's offset.
      */
-    public void setOffset(Point offset) {
+    public void setOffset(HeadingPoint offset) {
         this.offset = offset;
+    }
+
+    public HeadingPoint getOffset() {
+        return this.offset;
     }
 
     /**
      * Use the robot's current position as an offset for the tracker.
      *
-     * @see #setOffset(Point)
+//     * @see #setOffset(Point)
      */
     public void useCurrentPosAsOffset() {
         // Set the robot's offset to the inverse of the current position,
         // thus making the robot think whatever point it's at is 0.
-        setOffset(new Point(
+        setOffset(new HeadingPoint(
                 position.getX() * -1,
-                position.getY() * -1
+                position.getY() * -1,
+                position.getHeading() * -1
         ));
     }
 
@@ -282,11 +291,11 @@ public class ThreeWheelChassisTracker implements Tracker {
         // point by whatever the offset is.
         position = HeadingPoint
                 .fromOdometryPosition(odometryPosition) // convert pos to point
-                .transform(             // transform the point according to
-                                        // the tracker's offset
-                        offset.getX(),  // X offset
-                        offset.getY(),  // Y offset
-                        Angle.ZERO      // there is no angle offset (yet)
+                .transform(                   // transform the point according to
+                                              // the tracker's offset
+                        offset.getX(),        // X offset
+                        offset.getY(),        // Y offset
+                        offset.getAngle()     // there is no angle offset (yet)
                 );
     }
 }

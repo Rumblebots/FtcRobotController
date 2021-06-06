@@ -16,7 +16,6 @@ import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 import me.wobblyyyy.edt.DynamicArray;
 import me.wobblyyyy.pathfinder.api.Pathfinder;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
-import me.wobblyyyy.pathfinder.geometry.Point;
 import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderConstants;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
@@ -24,18 +23,17 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
-    // TODO fix power show points?
-    // first power shot (left)
-    private static final HeadingPoint TARGET_A = new HeadingPoint(48 + 5.5, 144, 0);
+    private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
+    private static final HeadingPoint BLUE_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 0);
+    private static final HeadingPoint BLUE_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5, 144, 0);
 
-    // second power shot (middle)
-    private static final HeadingPoint TARGET_B = new HeadingPoint(48 + 5.5 + 7.5, 144, 45);
+    private static final HeadingPoint RED_PS_L = new HeadingPoint(48 + 5.5 + 2 - 24, 144, 0);
+    private static final HeadingPoint RED_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 - 24, 144, 0);
+    private static final HeadingPoint RED_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5 - 24, 144, 0);
 
-    // third power shot (right)
-    private static final HeadingPoint TARGET_X = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 90);
-
-    // TODO
-    private static final HeadingPoint TARGET_Y = new HeadingPoint(10, 10, 135);
+    private static final HeadingPoint BLUE_HI = new HeadingPoint(48, 144, 0);
+    // todo fix this lol
+    private static final HeadingPoint RED_HI = new HeadingPoint(48, 144, 0);
 
     private boolean aPressedLast = false;
     private boolean bPressedLast = false;
@@ -50,6 +48,12 @@ public class MeccanumDrive extends OpMode {
     private boolean isPathfinderActive = false;
     private HeadingPoint target = HeadingPoint.ZERO;
     private boolean mustReset = false;
+
+    private enum Color {
+        RED,
+        BLUE
+    }
+    private Color color = Color.BLUE;
 
     Pathfinder pathfinder;
     DcMotor frontRight;
@@ -77,6 +81,17 @@ public class MeccanumDrive extends OpMode {
     //    boolean moveUpper = true;
     ShooterThread shooterThread;
 
+    /**
+     * initialize everything
+     *
+     * <p>
+     * <ul>
+     *     <li>{@code gamepad1.a}: set color to BLUE</li>
+     *     <li>{@code gamepad1.b}: set color to RED</li>
+     *     <li>default: set color to BLUE</li>
+     * </ul>
+     * </p>
+     */
     @Override
     public void init() {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -117,6 +132,14 @@ public class MeccanumDrive extends OpMode {
         PathfinderConstants.initializePathfinder(() -> false);
         pathfinder = PathfinderConstants.getPathfinder();
 //        PathfinderConstants.getChassisTracker().setOffset(new Point(35, 0));
+
+        if (gamepad1.a) {
+            this.color = Color.BLUE;
+        }
+
+        if (gamepad1.b) {
+            this.color = Color.RED;
+        }
     }
 
     void initializeFlywheels() {
@@ -177,16 +200,6 @@ public class MeccanumDrive extends OpMode {
 
     @Override
     public void loop() {
-        HeadingPoint robotPos = pathfinder.getPosition();
-        Point circleCenter = new Point(48, 72);
-        telemetry.addData("current", robotPos);
-        telemetry.addData("center", circleCenter);
-        telemetry.addData("closest point", RadiusFinder.closestPoint(
-                robotPos,
-                circleCenter,
-                24
-        ));
-
         updateButtons(
                 gamepad1.a,
                 gamepad1.b,
@@ -197,28 +210,73 @@ public class MeccanumDrive extends OpMode {
         if (aPressed || bPressed || xPressed || yPressed) mustReset = true;
 
         if (mustReset && !isPathfinderActive) {
-            if (aPressed) {
-                target = RadiusFinder.closestTargetPoint(
-                        pathfinder.getPosition(),
-                        TARGET_A
-                );
-            } else if (bPressed) {
-                target = RadiusFinder.closestTargetPoint(
-                        pathfinder.getPosition(),
-                        TARGET_B
-                );
-            } else if (xPressed) {
-                target = RadiusFinder.closestTargetPoint(
-                        pathfinder.getPosition(),
-                        TARGET_X
-                );
-            } else if (yPressed) {
-                // shouldn't really be used, we only have 3 power shots
-                target = RadiusFinder.closestTargetPoint(
-                        pathfinder.getPosition(),
-                        TARGET_Y
-                );
+            switch (this.color) {
+                case RED: {
+                    if (aPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                RED_PS_L
+                        );
+                    } else if (bPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                RED_PS_M
+                        );
+                    } else if (xPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                RED_PS_R
+                        );
+                    } else if (yPressed) {
+                        // shouldn't really be used, we only have 3 power shots
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                RED_HI
+                        );
+                    }
+                    break;
+                }
+
+                case BLUE: {
+                    if (aPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                BLUE_PS_L
+                        );
+                    } else if (bPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                BLUE_PS_M
+                        );
+                    } else if (xPressed) {
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                BLUE_PS_R
+                        );
+                    } else if (yPressed) {
+                        // shouldn't really be used, we only have 3 power shots
+                        target = RadiusFinder.closestTargetPoint(
+                                pathfinder.getPosition(),
+                                BLUE_HI
+                        );
+                    }
+                    break;
+                }
+
+                default: throw new UnsupportedOperationException("");
             }
+        }
+
+        if (gamepad1.start) {
+            HeadingPoint current = pathfinder.getPosition();
+            HeadingPoint offset = PathfinderConstants.getChassisTracker().getOffset();
+            PathfinderConstants.getChassisTracker().setOffset(
+                    new HeadingPoint(
+                            (current.getX() * -1) + 9 + offset.getX(),
+                            (current.getY() * -1) + 9 + offset.getY(),
+                            (current.getHeading() * -1) + offset.getHeading()
+                    )
+            );
         }
 
         updatePathfinder();
@@ -278,7 +336,7 @@ public class MeccanumDrive extends OpMode {
             wobbleArm.setPower(0);
         }
 
-        if (gamepad2.right_bumper) {
+        if (gamepad2.right_bumper && t.state) {
             pusher.setPosition(0.65);
         } else {
             pusher.setPosition(1);
@@ -315,15 +373,17 @@ public class MeccanumDrive extends OpMode {
 //            spinToSpeed(neededVel);
             flywheel1.setVelocity(2800);
             flywheel2.setVelocity(2800);
-            System.out.println("CVEL: " + flywheel1.getVelocity());
-            System.out.println("CVEL2z: " + flywheel2.getVelocity());
-            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
-            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
+//            System.out.println("CVEL: " + flywheel1.getVelocity());
+//            System.out.println("CVEL2z: " + flywheel2.getVelocity());
+//            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
+//            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
         } else {
             flywheel1.setPower(0);
             flywheel2.setPower(0);
         }
 
+        telemetry.addData("pos", pathfinder.getPosition().toString());
+        telemetry.update();
     }
 
     @Override

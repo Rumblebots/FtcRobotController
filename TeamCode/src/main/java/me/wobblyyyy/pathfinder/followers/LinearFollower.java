@@ -203,7 +203,7 @@ public class LinearFollower implements Follower {
                 Distance.getDistance(
                         odometry.getPos(),
                         end
-                ) < 2 ? coefficient / 1.5 : coefficient
+                ) < 2 ? coefficient / 1.0 : coefficient
         );
 
         /*
@@ -256,7 +256,7 @@ public class LinearFollower implements Follower {
                 end,
                 0.5
         )) {
-            if (getAngleDelta() < 5) {
+            if (getAngleDelta() < 2) {
                 drive.drive(RTransform.ZERO);
 
                 return true;
