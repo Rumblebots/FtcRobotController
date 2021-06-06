@@ -57,6 +57,7 @@ public class MeccanumDrive extends OpMode {
         RED,
         BLUE
     }
+
     private Color color = Color.BLUE;
 
     Pathfinder pathfinder;
@@ -83,7 +84,6 @@ public class MeccanumDrive extends OpMode {
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
     Toggle wobbleToggle = new Toggle();
-
 
 
     //    boolean moveUpper = true;
@@ -221,58 +221,17 @@ public class MeccanumDrive extends OpMode {
         if (mustReset && !isPathfinderActive) {
             switch (this.color) {
                 case RED: {
-                    if (aPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                RED_PS_L
-                        );
-                    } else if (bPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                RED_PS_M
-                        );
-                    } else if (xPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                RED_PS_R
-                        );
-                    } else if (yPressed) {
-                        // shouldn't really be used, we only have 3 power shots
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                RED_HI
-                        );
-                    }
+                    align(RED_PS_L, RED_PS_M, RED_PS_R, RED_HI);
                     break;
                 }
 
                 case BLUE: {
-                    if (aPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                BLUE_PS_L
-                        );
-                    } else if (bPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                BLUE_PS_M
-                        );
-                    } else if (xPressed) {
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                BLUE_PS_R
-                        );
-                    } else if (yPressed) {
-                        // shouldn't really be used, we only have 3 power shots
-                        target = RadiusFinder.closestTargetPoint(
-                                pathfinder.getPosition(),
-                                BLUE_HI
-                        );
-                    }
+                    align(BLUE_PS_L, BLUE_PS_M, BLUE_PS_R, BLUE_HI);
                     break;
                 }
 
-                default: throw new UnsupportedOperationException("");
+                default:
+                    throw new UnsupportedOperationException("");
             }
         }
 
@@ -402,6 +361,32 @@ public class MeccanumDrive extends OpMode {
 
         telemetry.addData("pos", pathfinder.getPosition().toString());
         telemetry.update();
+    }
+
+    private void align(HeadingPoint positionA, HeadingPoint positionB, HeadingPoint positionX, HeadingPoint positionY) {
+        if (aPressed) {
+            target = RadiusFinder.closestTargetPoint(
+                    pathfinder.getPosition(),
+                    positionA
+            );
+        } else if (bPressed) {
+            target = RadiusFinder.closestTargetPoint(
+                    pathfinder.getPosition(),
+                    positionB
+            );
+        } else if (xPressed) {
+            target = RadiusFinder.closestTargetPoint(
+                    pathfinder.getPosition(),
+                    positionX
+            );
+        } else if (yPressed) {
+            // shouldn't really be used, we only have 3 power shots
+            target = RadiusFinder.closestTargetPoint(
+                    pathfinder.getPosition(),
+                    positionY
+            );
+        }
+        return;
     }
 
     @Override
