@@ -21,6 +21,10 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.Toggle;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
     private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
@@ -70,7 +74,8 @@ public class MeccanumDrive extends OpMode {
     Servo pusher;
     DcMotor wobbleArm;
     Servo wobbleDropper;
-
+    ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+    boolean canStop = true;
     //    ColorSensor bottomSensor;
 //    ColorSensor topSensor;
     double multiplier = 0.5;
@@ -78,6 +83,9 @@ public class MeccanumDrive extends OpMode {
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
     Toggle wobbleToggle = new Toggle();
+
+
+
     //    boolean moveUpper = true;
     ShooterThread shooterThread;
 
@@ -118,8 +126,9 @@ public class MeccanumDrive extends OpMode {
         t.state = false;
         loadToggle.state = false;
         pushToggle.state = false;
-        wobbleToggle.state = true;
-        intakeMover.setPosition(0.33);
+        wobbleToggle.state = false;
+        wobbleDropper.setPosition(0.0);
+//        intakeMover.setPosition(0.33);
 //        wobbleArm.setPosition(0.25);
         shooterThread = new ShooterThread(flywheel2);
         shooterThread.start();
@@ -338,21 +347,30 @@ public class MeccanumDrive extends OpMode {
 
         if (gamepad2.right_bumper && t.state) {
             pusher.setPosition(0.65);
+            canStop = false;
+            exec.schedule(() -> {
+                canStop = true;
+            }, 500, TimeUnit.MILLISECONDS);
         } else {
-            pusher.setPosition(1);
+            if (canStop) {
+                pusher.setPosition(1);
+            }
         }
 
         if (gamepad2.left_trigger > gamepad2.right_trigger && gamepad2.left_trigger > 0.3) {
+            intakeMover.setPosition(1.0);
             intake.setPower(1.0);
             intakeServo.setPower(0.8);
             System.out.println("Move HEre");
             upperIntakeServo.setPower(0.8);
         } else if (gamepad2.right_trigger > gamepad2.left_trigger && gamepad2.right_trigger > 0.3) {
+            intakeMover.setPosition(0.0);
             loader.setPosition(1);
             intake.setPower(-1);
             intakeServo.setPower(-0.8);
             upperIntakeServo.setPower(-0.8);
         } else {
+            intakeMover.setPosition(1.0);
             loader.setPosition((180.0 - 36.0) / 180.0);
             intake.setPower(0);
             intakeServo.setPower(0);
