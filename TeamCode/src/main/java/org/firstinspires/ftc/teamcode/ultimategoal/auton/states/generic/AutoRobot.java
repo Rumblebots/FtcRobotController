@@ -13,6 +13,7 @@ import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.recorder.Recorder;
 import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderConstants;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.WebcamTFOD;
 
@@ -39,6 +40,7 @@ public class AutoRobot {
     final Point offset;
     HeadingPoint wobblePoint;
     Pathfinder pathfinder;
+    private final Recorder recorder;
 
     AutoRobot(HeadingPoint[] potentialWobblePoints, HardwareMap hardwareMap, Telemetry telemetry, Point offset, Supplier<Boolean> shouldRun) {
         this.potentialWobblePoints = potentialWobblePoints;
@@ -48,6 +50,11 @@ public class AutoRobot {
         wobblePoint = potentialWobblePoints[2];
         initialize();
         this.pathfinder = initializePathfinder(offset, shouldRun);
+        this.recorder = new Recorder(
+                pathfinder,
+                "DATA.json"
+        );
+        recorder.start(shouldRun);
     }
 
     private void initialize() {
