@@ -350,7 +350,7 @@ public class MeccanumDrive extends OpMode {
             canStop = false;
             exec.schedule(() -> {
                 canStop = true;
-            }, 500, TimeUnit.MILLISECONDS);
+            }, 300, TimeUnit.MILLISECONDS);
         } else {
             if (canStop) {
                 pusher.setPosition(1);
