@@ -12,6 +12,7 @@ import me.wobblyyyy.pathfinder.geometry.Point;
 public class GenericRed extends LinearOpMode {
 
     private Point offset;
+    private boolean withDelay = false;
 
 //    GenericBlue(double xOffset) {
 //     this.xOffset = xOffset;
@@ -25,6 +26,8 @@ public class GenericRed extends LinearOpMode {
         this.offset = offset;
     }
 
+    public void withDelay(boolean delay) {withDelay = delay;}
+
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[] {
@@ -34,6 +37,16 @@ public class GenericRed extends LinearOpMode {
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
         waitForStart();
+        if (withDelay) {
+            switch (robot.getTargetZone()) {
+                case A:
+                    sleep(7000);
+                case B:
+                    sleep(6000);
+                case C:
+                    sleep(5000);
+            }
+        }
         robot.goToPoint(new HeadingPoint(96, 64, 180), this::opModeIsActive, 10);
         robot.setShooterPower(0.9);
         sleep(200);
