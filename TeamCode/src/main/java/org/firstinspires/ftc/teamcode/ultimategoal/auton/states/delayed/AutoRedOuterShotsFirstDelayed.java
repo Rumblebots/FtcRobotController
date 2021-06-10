@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import me.wobblyyyy.pathfinder.geometry.Point;
 import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericRed;
 
-@Autonomous(name = "AutonRedOuter - States", group = "Main Autonomous")
+@Autonomous(name = "AutonRedOuterShotsFirst - States", group = "Delayed Autonomous")
 public class AutoRedOuterShotsFirstDelayed extends GenericRed {
 
     @Override
