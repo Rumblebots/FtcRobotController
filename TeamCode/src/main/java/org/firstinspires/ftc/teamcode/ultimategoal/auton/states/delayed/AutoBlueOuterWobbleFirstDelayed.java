@@ -7,10 +7,10 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.delayed;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import me.wobblyyyy.pathfinder.geometry.Point;
-import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericBlue;
+import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericBlueWobbleFirst;
 
 @Autonomous(name = "AutonBlueOuterWobbleFirstDelayed- States", group = "Delayed Autonomous")
-public class AutoBlueOuterWobbleFirstDelayed extends GenericBlue {
+public class AutoBlueOuterWobbleFirstDelayed extends GenericBlueWobbleFirst {
 
     @Override
     public void runOpMode() throws InterruptedException {

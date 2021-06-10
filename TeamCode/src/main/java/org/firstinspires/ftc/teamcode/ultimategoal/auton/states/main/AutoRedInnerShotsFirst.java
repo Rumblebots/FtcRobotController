@@ -8,11 +8,11 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import me.wobblyyyy.pathfinder.geometry.Point;
-import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericRed;
+import org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic.GenericRedShotsFirst;
 
 @Autonomous(name = "AutonRedInnerShotsFirst - States", group = "Main Autonomous")
 
-public class AutoRedInnerShotsFirst extends GenericRed {
+public class AutoRedInnerShotsFirst extends GenericRedShotsFirst {
     @Override
     public void runOpMode() throws InterruptedException {
         System.out.println("RUNNING");
