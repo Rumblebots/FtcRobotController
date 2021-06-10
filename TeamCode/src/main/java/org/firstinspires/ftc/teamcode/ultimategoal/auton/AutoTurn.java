@@ -6,6 +6,7 @@
 package org.firstinspires.ftc.teamcode.ultimategoal.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.MotionType;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
 
+@Disabled
 @Autonomous(name = "Test Auto Turn", group = "Auton")
 
 public class AutoTurn extends LinearOpMode {

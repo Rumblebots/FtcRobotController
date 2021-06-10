@@ -6,6 +6,7 @@
 package org.firstinspires.ftc.teamcode.ultimategoal.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,7 +14,7 @@ import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.MotionType;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.OdometryThread;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.ShooterThread;
-
+@Disabled
 @Autonomous(name = "Main Auo", group = "Auton")
 
 public class GenericAuto extends LinearOpMode {
