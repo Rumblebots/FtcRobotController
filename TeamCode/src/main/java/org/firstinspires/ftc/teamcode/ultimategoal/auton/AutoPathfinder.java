@@ -6,6 +6,7 @@
 package org.firstinspires.ftc.teamcode.ultimategoal.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.ultimategoal.util.WebcamTFOD;
 
 import java.util.List;
 
+@Disabled
 @Autonomous(name = "AutonPathfinder", group = "Autonomous")
 public class AutoPathfinder extends LinearOpMode {
 

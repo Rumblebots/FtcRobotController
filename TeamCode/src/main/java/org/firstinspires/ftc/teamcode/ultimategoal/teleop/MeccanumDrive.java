@@ -254,7 +254,12 @@ public class MeccanumDrive extends OpMode {
             }
         }
 
+        if (gamepad1.right_bumper) {
+            pathfinder.getManager().getExecutor().clear();
+        }
+
         if (gamepad1.start) {
+            PathfinderConstants.resetMotors();
             HeadingPoint current = pathfinder.getPosition();
             HeadingPoint offset = PathfinderConstants.getChassisTracker().getOffset();
             PathfinderConstants.getChassisTracker().setOffset(

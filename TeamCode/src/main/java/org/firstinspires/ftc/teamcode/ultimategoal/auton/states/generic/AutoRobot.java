@@ -15,8 +15,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.recorder.Recorder;
 import org.firstinspires.ftc.teamcode.ultimategoal.pathfinder.PathfinderConstants;
+import org.firstinspires.ftc.teamcode.ultimategoal.util.TargetZone;
 import org.firstinspires.ftc.teamcode.ultimategoal.util.WebcamTFOD;
 
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -33,6 +35,8 @@ public class AutoRobot {
     Servo webcamServo;
     DigitalChannel armOut;
     DigitalChannel armIn;
+    int zoneOffset = 0;
+    TargetZone zone = TargetZone.C;
 
     final HeadingPoint[] potentialWobblePoints;
     final HardwareMap hardwareMap;
@@ -70,6 +74,7 @@ public class AutoRobot {
         webcam.init(hardwareMap);
         webcam.activateTfod();
         pusher.setPosition(1);
+        wobbleDropper.setPosition(0.0);
     }
 
     private void setWebcamPos() {
@@ -91,19 +96,19 @@ public class AutoRobot {
     private void initializeShooterMotor() {
         flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
         flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
-        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
-        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel1.setMotorType(flywheel1Config);
-
-        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
-        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel2.setMotorType(flywheel2Config);
-
-        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
-        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+//        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+//        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel1.setMotorType(flywheel1Config);
+//
+//        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+//        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel2.setMotorType(flywheel2Config);
+//
+//        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+//        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
     private Pathfinder initializePathfinder(Point offset, Supplier<Boolean> shouldRun) {
@@ -169,6 +174,7 @@ public class AutoRobot {
                         wobblePoint = potentialWobblePoints[0];
                     } else if (recognition.getLabel().equals("Single")) {
                         wobblePoint = potentialWobblePoints[1];
+                        zoneOffset = 5;
                     } else {
                         wobblePoint = potentialWobblePoints[2];
                     }
@@ -178,6 +184,12 @@ public class AutoRobot {
             }
         }
     }
+
+    public TargetZone getTargetZone() {
+        return zone;
+    }
+
+    public int getZoneOffset() {return zoneOffset;}
 
     public void dropGoal(Consumer<Integer> sleep) {
         while (armOut.getState()) {
@@ -201,6 +213,20 @@ public class AutoRobot {
         wobbleDropper.setPosition(0.0);
     }
 
+    public double getAdjPower() {
+        int count = 0;
+        double totalVoltage = 0;
+        for(VoltageSensor voltageSensor : hardwareMap.voltageSensor) {
+            System.out.println("VOLTAGE " + voltageSensor.getDeviceName() + ": " + voltageSensor.getVoltage());
+            totalVoltage += voltageSensor.getVoltage();
+            count++;
+        }
+        double voltageStep = 0.1/2;
+        double averageExtVolts = Math.max(totalVoltage/count - 12, 0);
+        System.out.println("POWER DECLINE: " + (averageExtVolts * voltageStep));
+        return Math.min(1.0, 1 - (averageExtVolts * voltageStep));
+    }
+
     public void setShooterPower(double pow) {
         for(VoltageSensor voltageSensor : hardwareMap.voltageSensor) {
             System.out.println("Voltage: " + voltageSensor.getVoltage());
@@ -208,9 +234,11 @@ public class AutoRobot {
         System.out.println("Velocity: " +flywheel1.getVelocity());
         System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
         System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
-        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
-//        flywheel2.setPower(pow);
-        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
+//        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
+////        flywheel2.setPower(pow);
+//        flywheel1.setVelocity(flywheel1.getMotorType().getAchieveableMaxTicksPerSecond() * pow);
+        flywheel1.setPower(pow);
+        flywheel2.setPower(pow);
         loader.setPosition((180.0-36.0)/180.0);
     }
 

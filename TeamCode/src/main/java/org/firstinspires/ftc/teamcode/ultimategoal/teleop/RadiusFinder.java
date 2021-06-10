@@ -69,7 +69,7 @@ public class RadiusFinder {
                 closestPoint,
                 targetPos
 //        ) + 90 - Math.toDegrees(Math.atan(6.0/84)));
-        ) + 86);
+        ) + 83);
 
         return closestPoint.withHeading(desiredAngle);
     }
