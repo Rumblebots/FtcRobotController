@@ -28,17 +28,17 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "Actual Meccanum", group = "Test")
 public class MeccanumDrive extends OpMode {
-    private static final HeadingPoint RED_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
-    private static final HeadingPoint RED_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 0);
-    private static final HeadingPoint RED_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5, 144, 0);
+    private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2, 144, 0);
+    private static final HeadingPoint BLUE_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5, 144, 0);
+    private static final HeadingPoint BLUE_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5, 144, 0);
 
-    private static final HeadingPoint BLUE_PS_L = new HeadingPoint(48 + 5.5 + 2 + 24, 144, 0);
-    private static final HeadingPoint BLUE_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 24, 144, 0);
-    private static final HeadingPoint BLUE_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5 + 24, 144, 0);
+    private static final HeadingPoint RED_PS_L = new HeadingPoint(48 + 5.5 + 2 + 24, 144, 0);
+    private static final HeadingPoint RED_PS_M = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 24, 144, 0);
+    private static final HeadingPoint RED_PS_R = new HeadingPoint(48 + 5.5 + 7.5 + 7.5 + 7.5 + 24, 144, 0);
 
-    private static final HeadingPoint BLUE_HI = new HeadingPoint(120, 144 + 24 - 8, 0);
+    private static final HeadingPoint RED_HI = new HeadingPoint(120, 144 + 24 - 8, 0);
     // todo fix this lol
-    private static final HeadingPoint RED_HI = new HeadingPoint(48 - 12, 144 + 24 - 8, 0);
+    private static final HeadingPoint BLUE_HI = new HeadingPoint(48 - 12, 144 + 24 - 8, 0);
 
     private boolean aPressedLast = false;
     private boolean bPressedLast = false;
@@ -240,12 +240,12 @@ public class MeccanumDrive extends OpMode {
         if (mustReset && !isPathfinderActive) {
             switch (this.color) {
                 case RED: {
-                    align(RED_PS_L, RED_PS_M, RED_PS_R, RED_HI);
+                    align(BLUE_PS_L, BLUE_PS_M, BLUE_PS_R, BLUE_HI);
                     break;
                 }
 
                 case BLUE: {
-                    align(BLUE_PS_L, BLUE_PS_M, BLUE_PS_R, BLUE_HI);
+                    align(RED_PS_L, RED_PS_M, RED_PS_R, RED_HI);
                     break;
                 }
 
