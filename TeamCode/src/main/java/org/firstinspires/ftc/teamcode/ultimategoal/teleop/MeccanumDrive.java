@@ -7,10 +7,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.tejasmehta.OdometryCore.localization.OdometryPosition;
 import me.wobblyyyy.edt.DynamicArray;
@@ -86,6 +83,7 @@ public class MeccanumDrive extends OpMode {
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
     Toggle wobbleToggle = new Toggle();
+    Toggle adjPowerToggle = new Toggle();
 
 
     //    boolean moveUpper = true;
@@ -128,6 +126,7 @@ public class MeccanumDrive extends OpMode {
 //        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         t.state = false;
+        adjPowerToggle.state = false;
         loadToggle.state = false;
         pushToggle.state = false;
         wobbleToggle.state = false;
@@ -139,7 +138,7 @@ public class MeccanumDrive extends OpMode {
         try {
             OdometryThread.getInstance();
         } catch (Exception e) {
-            OdometryThread.initialize(42, backLeft, backRight, frontRight, () -> true);
+            OdometryThread.initialize(9, backLeft, backRight, frontRight, () -> true);
         }
         PathfinderConstants.initializeMotors(hardwareMap);
         PathfinderConstants.initializePathfinder(() -> false);
@@ -309,10 +308,16 @@ public class MeccanumDrive extends OpMode {
 //        telemetry.addData("s1 Red", bottomSensor.red());
 //        telemetry.addData("s2 red", topSensor.red());
 //        telemetry.addData("mover", moveUpper);
-        if (gamepad2.a) {
+        if (gamepad2.a && !adjPowerToggle.state) {
             t.onPress();
         } else {
             t.onRelease();
+        }
+
+        if (gamepad2.b && !t.state) {
+            adjPowerToggle.onPress();
+        } else {
+            adjPowerToggle.onRelease();
         }
 
         if (gamepad2.x) {
@@ -329,7 +334,7 @@ public class MeccanumDrive extends OpMode {
             wobbleArm.setPower(0);
         }
 
-        if (gamepad2.right_bumper && t.state) {
+        if (gamepad2.right_bumper && (t.state || adjPowerToggle.state)) {
             pusher.setPosition(0.65);
             canStop = false;
             exec.schedule(() -> {
@@ -389,6 +394,10 @@ public class MeccanumDrive extends OpMode {
 //            System.out.println("CVEL2z: " + flywheel2.getVelocity());
 //            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
 //            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
+        } else if (adjPowerToggle.state) {
+            loader.setPosition((180.0 - 36.0) / 180.0);
+            flywheel1.setPower(getAdjPower());
+            flywheel2.setPower(getAdjPower());
         } else {
 //            loader.setPosition(1);
             flywheel1.setPower(0);
@@ -399,6 +408,10 @@ public class MeccanumDrive extends OpMode {
         }
 
         telemetry.addData("pos", pathfinder.getPosition().toString());
+        telemetry.addData("Left ENC", backLeft.getCurrentPosition());
+        telemetry.addData("Right ENC", backRight.getCurrentPosition());
+        telemetry.addData("Back ENC", frontRight.getCurrentPosition());
+        telemetry.addData("Odometry Pos: ", "x: " + getCurrentPos().getX() + ", y: " + getCurrentPos().getY() + ", heading: " + getCurrentPos().getHeadingDegrees());
         telemetry.update();
     }
 
@@ -492,6 +505,20 @@ public class MeccanumDrive extends OpMode {
 //            double sol2 = ((-singleCoefficient - rooted)/(2 * quadraticCoefficient)) * 3.281;
 //            return Math.max(sol1, sol2);
         }
+    }
+
+    public double getAdjPower() {
+        int count = 0;
+        double totalVoltage = 0;
+        for(VoltageSensor voltageSensor : hardwareMap.voltageSensor) {
+            System.out.println("VOLTAGE " + voltageSensor.getDeviceName() + ": " + voltageSensor.getVoltage());
+            totalVoltage += voltageSensor.getVoltage();
+            count++;
+        }
+        double voltageStep = 0.2/3;
+        double averageExtVolts = Math.max(totalVoltage/count - 11, 0);
+        System.out.println("POWER DECLINE: " + (averageExtVolts * voltageStep));
+        return Math.min(1.0, 1 - (averageExtVolts * voltageStep));
     }
 
     public OdometryPosition getCurrentPos() {

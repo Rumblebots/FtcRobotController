@@ -31,8 +31,8 @@ public class GenericBlueWobbleFirst extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[]{
-                new HeadingPoint(22, 124, 180),
-                new HeadingPoint(48, 104, 180),
+                new HeadingPoint(26, 124, 180),
+                new HeadingPoint(52, 100, 180),
                 new HeadingPoint(24, 80, 180),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
@@ -53,19 +53,20 @@ public class GenericBlueWobbleFirst extends LinearOpMode {
         sleep(500);
         robot.bringArmIn();
         int powerShotH = robot.getZoneOffset();
-        robot.goToPoint(new HeadingPoint(27, 66, 154 - powerShotH), this::opModeIsActive, 10);
+        robot.goToPoint(new HeadingPoint(27 + robot.getZoneOffset(), 66, 154 + robot.getZoneOffset()), this::opModeIsActive, 10);
         sleep(200);
         robot.setShooterPower(robot.getAdjPower());
         sleep(500);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(27, 66, 150 - powerShotH), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(27 + robot.getZoneOffset(), 66, 150 + robot.getZoneOffset()), this::opModeIsActive, 4);
         sleep(200);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(27, 66, 145 - powerShotH), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(27 + robot.getZoneOffset(), 66, 145 + robot.getZoneOffset()), this::opModeIsActive, 4);
         sleep(200);
         robot.shoot(this::sleep);
         robot.setShooterPower(0.0);
         sleep(200);
         robot.goToPoint(new HeadingPoint(26, 74, 146), this::opModeIsActive, 4);
+        robot.stopRecording();
     }
 }

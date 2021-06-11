@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode.ultimategoal.auton.states.generic;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import me.wobblyyyy.pathfinder.geometry.HeadingPoint;
 import me.wobblyyyy.pathfinder.geometry.Point;
+import org.firstinspires.ftc.teamcode.ultimategoal.util.TargetZone;
 
 public class GenericRedWobbleFirst extends LinearOpMode {
 
@@ -31,8 +32,8 @@ public class GenericRedWobbleFirst extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[] {
-                new HeadingPoint(132, 120, 90),
-                new HeadingPoint(128, 100, 180),
+                new HeadingPoint(130, 120, 90),
+                new HeadingPoint(124, 100, 180),
                 new HeadingPoint(128, 72, 90),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
@@ -40,37 +41,42 @@ public class GenericRedWobbleFirst extends LinearOpMode {
         if (withDelay) {
             switch (robot.getTargetZone()) {
                 case A:
-                    sleep(7000);
-                case B:
                     sleep(6000);
-                case C:
+                case B:
                     sleep(5000);
+                case C:
+                    sleep(4000);
             }
         }
-        robot.goToPoint(new HeadingPoint(96, 64, 180), this::opModeIsActive, 10);
-        robot.setShooterPower(0.9);
-        sleep(200);
-        robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
-        sleep(200);
-        robot.goToPoint(new HeadingPoint(96, 65, -175), this::opModeIsActive, 3);
-        sleep(200);
-        robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
-        sleep(200);
-        robot.goToPoint(new HeadingPoint(96, 65, -170), this::opModeIsActive, 3);
-        sleep(500);
-        robot.shoot(this::sleep);
-        robot.setShooterPower(0.0);
-        sleep(500);
+
         robot.goToPoint(robot.getWobblePoint(), this::opModeIsActive, 10);
         sleep(500);
         robot.dropGoal(this::sleep);
         sleep(500);
         robot.bringArmIn();
-        robot.goToPoint(new HeadingPoint(robot.getWobblePoint().getX(), robot.getWobblePoint().getY()-10, robot.getWobblePoint().getHeading()), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(122, 32, 165), this::opModeIsActive, 10);
+        if (robot.getTargetZone() == TargetZone.A && !withDelay) {
+            System.out.println("SLEEP");
+            sleep(2000);
+        }
+        sleep(500);
+        robot.goToPoint(new HeadingPoint(122, 64, 206), this::opModeIsActive, 10);
+        robot.setShooterPower(0.9);
         sleep(200);
-        robot.goToPoint(new HeadingPoint(110, 74, 180), this::opModeIsActive, 3);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(122, 65, -157), this::opModeIsActive, 3);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(122, 66, -150), this::opModeIsActive, 3);
+        sleep(200);
+        robot.shoot(this::sleep);
+        robot.goToPoint(new HeadingPoint(122, 65, -153), this::opModeIsActive, 3);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(122, 66, -145), this::opModeIsActive, 3);
+        sleep(500);
+        robot.shoot(this::sleep);
+        robot.setShooterPower(0.0);
+        sleep(500);
+        robot.goToPoint(new HeadingPoint(122, 74, 180), this::opModeIsActive, 3);
         sleep(1000);
         robot.stopRecording();
     }

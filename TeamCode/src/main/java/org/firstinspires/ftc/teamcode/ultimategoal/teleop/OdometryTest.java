@@ -31,7 +31,7 @@ public class OdometryTest extends OpMode {
         backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        OdometryThread.initialize(42, backLeft, backRight, frontRight, () -> true);
+        OdometryThread.initialize(9, backLeft, backRight, frontRight, () -> true);
     }
 
     @Override

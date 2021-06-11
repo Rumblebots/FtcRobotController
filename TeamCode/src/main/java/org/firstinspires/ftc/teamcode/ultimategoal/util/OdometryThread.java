@@ -55,7 +55,7 @@ public class OdometryThread extends Thread{
     }
 
     private OdometryThread(double offset, DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderBack) {
-        currentPosition = new OdometryPosition(offset, 0, 0, HeadingUnit.RADIANS);
+        currentPosition = new OdometryPosition(offset, offset, 0, HeadingUnit.RADIANS);
         this.offset = offset;
         this.encoderLeft = encoderLeft;
         this.encoderRight = encoderRight;
@@ -76,7 +76,7 @@ public class OdometryThread extends Thread{
                 exec.shutdown();
             }
             OdometryPosition rawPos = OdometryCore.getInstance().getCurrentPosition(new EncoderPositions(-encoderLeft.getCurrentPosition(), encoderRight.getCurrentPosition(), encoderBack.getCurrentPosition()));
-            currentPosition = new OdometryPosition(rawPos.getX() + offset, rawPos.getY(), rawPos.getHeadingRadians(), HeadingUnit.RADIANS);
+            currentPosition = new OdometryPosition(rawPos.getX() + offset, rawPos.getY() + offset, rawPos.getHeadingRadians(), HeadingUnit.RADIANS);
         }, 0, 10, TimeUnit.MILLISECONDS);
 //        while (running) {
 //            OdometryPosition rawPos = OdometryCore.getInstance().getCurrentPosition(new EncoderPositions(-encoderLeft.getCurrentPosition(), encoderRight.getCurrentPosition(), encoderBack.getCurrentPosition()));

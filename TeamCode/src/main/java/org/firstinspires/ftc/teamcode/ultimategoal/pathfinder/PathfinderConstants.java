@@ -34,9 +34,12 @@ public class PathfinderConstants {
 
     private static final double SPEED = 0.8;
     private static final double WHEEL_DIAMETER = 1.5;
-    private static final double OFFSET_LEFT = 7.83;
-    private static final double OFFSET_RIGHT = 7.83;
-    private static final double OFFSET_BACK = 1.0;
+//    private static final double OFFSET_BACK = 1.00;
+//    private static final double OFFSET_LEFT = 7.83;
+//    private static final double OFFSET_RIGHT = 7.83;
+    private static final double OFFSET_LEFT = 8.33;
+    private static final double OFFSET_RIGHT = 8.33;
+    private static final double OFFSET_BACK = 1.34;
 
     private static DcMotor frMotor;
     private static DcMotor flMotor;
@@ -49,6 +52,13 @@ public class PathfinderConstants {
         brMotor = hardwareMap.dcMotor.get(NAME_BR_MOTOR);
         blMotor = hardwareMap.dcMotor.get(NAME_BL_MOTOR);
 //        resetMotors();
+    }
+
+    public static void stopMotors() {
+        flMotor.setPower(0);
+        frMotor.setPower(0);
+        brMotor.setPower(0);
+        blMotor.setPower(0);
     }
 
     public static void resetMotors() {

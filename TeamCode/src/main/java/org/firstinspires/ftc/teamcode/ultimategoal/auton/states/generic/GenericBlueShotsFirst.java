@@ -60,5 +60,6 @@ public class GenericBlueShotsFirst extends LinearOpMode {
         robot.goToPoint(new HeadingPoint(54, robot.getWobblePoint().getY(), 146), this::opModeIsActive, 4);
         sleep(200);
         robot.goToPoint(new HeadingPoint(54, 74, 146), this::opModeIsActive, 4);
+        robot.stopRecording();
     }
 }

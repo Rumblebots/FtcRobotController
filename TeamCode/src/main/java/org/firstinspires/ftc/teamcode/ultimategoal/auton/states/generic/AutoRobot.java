@@ -36,7 +36,7 @@ public class AutoRobot {
     DigitalChannel armOut;
     DigitalChannel armIn;
     int zoneOffset = 0;
-    TargetZone zone = TargetZone.C;
+    TargetZone zone = TargetZone.A;
 
     final HeadingPoint[] potentialWobblePoints;
     final HardwareMap hardwareMap;
@@ -157,6 +157,7 @@ public class AutoRobot {
             yDist = Math.abs(pathfinder.getPosition().getY() - point.getY());
             headingDiff = Math.abs(pathfinder.getPosition().getHeading() - point.getHeading());
         }
+        PathfinderConstants.stopMotors();
         pathfinder.stopRobot();
         pathfinder.getManager().getExecutor().clear();
         System.out.println("NEW HEADING PT: " + pathfinder.getPosition());
@@ -172,11 +173,14 @@ public class AutoRobot {
                 for (Recognition recognition : updatedRecognitions) {
                     if (recognition.getLabel().equals("Quad")) {
                         wobblePoint = potentialWobblePoints[0];
+                        zone = TargetZone.C;
                     } else if (recognition.getLabel().equals("Single")) {
                         wobblePoint = potentialWobblePoints[1];
                         zoneOffset = 5;
+                        zone = TargetZone.B;
                     } else {
                         wobblePoint = potentialWobblePoints[2];
+                        zone = TargetZone.A;
                     }
                     telemetry.addData("Object", recognition.getLabel());
                 }
