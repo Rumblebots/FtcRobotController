@@ -31,7 +31,7 @@ public class GenericBlueWobbleFirst extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[]{
-                new HeadingPoint(24, 128, 180),
+                new HeadingPoint(22, 124, 180),
                 new HeadingPoint(48, 104, 180),
                 new HeadingPoint(24, 80, 180),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
@@ -53,7 +53,7 @@ public class GenericBlueWobbleFirst extends LinearOpMode {
         sleep(500);
         robot.bringArmIn();
         int powerShotH = robot.getZoneOffset();
-        robot.goToPoint(new HeadingPoint(27, 66, 155 - powerShotH), this::opModeIsActive, 10);
+        robot.goToPoint(new HeadingPoint(27, 66, 154 - powerShotH), this::opModeIsActive, 10);
         sleep(200);
         robot.setShooterPower(robot.getAdjPower());
         sleep(500);

@@ -78,6 +78,7 @@ public class MeccanumDrive extends OpMode {
     Servo wobbleDropper;
     ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
     boolean canStop = true;
+    boolean loaderDown = true;
     //    ColorSensor bottomSensor;
 //    ColorSensor topSensor;
     double multiplier = 0.5;
@@ -163,19 +164,19 @@ public class MeccanumDrive extends OpMode {
     void initializeFlywheels() {
         flywheel1 = hardwareMap.get(DcMotorEx.class, "flywheel1");
         flywheel2 = hardwareMap.get(DcMotorEx.class, "flywheel2");
-        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
-        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel1.setMotorType(flywheel1Config);
-
-        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
-        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
-        flywheel2.setMotorType(flywheel2Config);
-
-        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
-        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+//        MotorConfigurationType flywheel1Config = flywheel1.getMotorType().clone();
+//        flywheel1Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel1.setMotorType(flywheel1Config);
+//
+//        MotorConfigurationType flywheel2Config = flywheel2.getMotorType().clone();
+//        flywheel2Config.setAchieveableMaxRPMFraction(1.0);
+//        flywheel2.setMotorType(flywheel2Config);
+//
+//        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//        System.out.println("FW1 PID: " + flywheel1.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+//        System.out.println("FW2 PID: " + flywheel2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
     public boolean pressed(boolean current,
@@ -340,21 +341,21 @@ public class MeccanumDrive extends OpMode {
             }
         }
 
-        if (gamepad2.left_trigger > gamepad2.right_trigger && gamepad2.left_trigger > 0.3) {
+        if (gamepad2.left_trigger > gamepad2.right_trigger && gamepad2.left_trigger > 0.3 && !t.state) {
             intakeMover.setPosition(1.0);
             intake.setPower(1.0);
             intakeServo.setPower(0.8);
             System.out.println("Move HEre");
             upperIntakeServo.setPower(0.8);
-        } else if (gamepad2.right_trigger > gamepad2.left_trigger && gamepad2.right_trigger > 0.3) {
+        } else if (gamepad2.right_trigger > gamepad2.left_trigger && gamepad2.right_trigger > 0.3 && !t.state) {
             intakeMover.setPosition(0.0);
-            loader.setPosition(1);
+//            loader.setPosition(1);
             intake.setPower(-1);
             intakeServo.setPower(-0.8);
             upperIntakeServo.setPower(-0.8);
         } else {
             intakeMover.setPosition(1.0);
-            loader.setPosition((180.0 - 36.0) / 180.0);
+//            loader.setPosition((180.0 - 36.0) / 180.0);
             intake.setPower(0);
             intakeServo.setPower(0);
             upperIntakeServo.setPower(0);
@@ -366,21 +367,35 @@ public class MeccanumDrive extends OpMode {
             wobbleDropper.setPosition(0.0);
         }
 
+        if (gamepad2.left_bumper) {
+            loader.setPosition((180-25)/180.0);
+            loaderDown = false;
+            exec.schedule(() -> {
+                loaderDown = true;
+            }, 150, TimeUnit.MILLISECONDS);
+        }
+
         if (t.state) {
 //            double neededVel = calculateMissing(true, 27);
 //            if (neededVel == -1) {
 //                System.out.println("BAD");
 //            }
 //            spinToSpeed(neededVel);
-            flywheel1.setVelocity(2800);
-            flywheel2.setVelocity(2800);
+//            loaderDown = true;
+            loader.setPosition((180.0 - 36.0) / 180.0);
+            flywheel1.setPower(1.0);
+            flywheel2.setPower(1.0);
 //            System.out.println("CVEL: " + flywheel1.getVelocity());
 //            System.out.println("CVEL2z: " + flywheel2.getVelocity());
 //            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
 //            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
         } else {
+//            loader.setPosition(1);
             flywheel1.setPower(0);
             flywheel2.setPower(0);
+            if (loaderDown) {
+                loader.setPosition(1);
+            }
         }
 
         telemetry.addData("pos", pathfinder.getPosition().toString());

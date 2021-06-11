@@ -14,14 +14,6 @@ public class GenericBlueShotsFirst extends LinearOpMode {
     private Point offset;
     private boolean withDelay = false;
 
-//    GenericBlue(double xOffset) {
-//     this.xOffset = xOffset;
-//    }
-
-//    GenericBlue() {
-//        xOffset = 15;
-//    }
-
     public void setOffset(Point offset) {
         this.offset = offset;
     }
@@ -31,7 +23,7 @@ public class GenericBlueShotsFirst extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[]{
-                new HeadingPoint(24, 128, 180),
+                new HeadingPoint(26, 124, 180),
                 new HeadingPoint(48, 104, 180),
                 new HeadingPoint(24, 80, 180),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
@@ -47,15 +39,15 @@ public class GenericBlueShotsFirst extends LinearOpMode {
                     sleep(5000);
             }
         }
-        robot.goToPoint(new HeadingPoint(54, 66, 180), this::opModeIsActive, 10);
+        robot.goToPoint(new HeadingPoint(54, 66, 175), this::opModeIsActive, 10);
         sleep(200);
         robot.setShooterPower(robot.getAdjPower());
         sleep(500);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(54, 66, 175), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(54, 66, 170), this::opModeIsActive, 4);
         sleep(200);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(54, 66, 170), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(54, 66, 165), this::opModeIsActive, 4);
         sleep(200);
         robot.shoot(this::sleep);
         robot.setShooterPower(0.0);
@@ -65,6 +57,8 @@ public class GenericBlueShotsFirst extends LinearOpMode {
         sleep(500);
         robot.bringArmIn();
         sleep(200);
-        robot.goToPoint(new HeadingPoint(26, 74, 146), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(54, robot.getWobblePoint().getY(), 146), this::opModeIsActive, 4);
+        sleep(200);
+        robot.goToPoint(new HeadingPoint(54, 74, 146), this::opModeIsActive, 4);
     }
 }

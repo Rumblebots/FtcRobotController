@@ -221,8 +221,8 @@ public class AutoRobot {
             totalVoltage += voltageSensor.getVoltage();
             count++;
         }
-        double voltageStep = 0.1/2;
-        double averageExtVolts = Math.max(totalVoltage/count - 12, 0);
+        double voltageStep = 0.2/3;
+        double averageExtVolts = Math.max(totalVoltage/count - 11, 0);
         System.out.println("POWER DECLINE: " + (averageExtVolts * voltageStep));
         return Math.min(1.0, 1 - (averageExtVolts * voltageStep));
     }
