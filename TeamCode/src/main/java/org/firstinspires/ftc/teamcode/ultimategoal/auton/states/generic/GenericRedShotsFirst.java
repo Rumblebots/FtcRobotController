@@ -32,7 +32,7 @@ public class GenericRedShotsFirst extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[] {
                 new HeadingPoint(132, 120, 90),
-                new HeadingPoint(128, 100, 180),
+                new HeadingPoint(124, 100, 180),
                 new HeadingPoint(128, 72, 90),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
@@ -47,18 +47,22 @@ public class GenericRedShotsFirst extends LinearOpMode {
                     sleep(5000);
             }
         }
-        robot.goToPoint(new HeadingPoint(96, 64, 180), this::opModeIsActive, 10);
-        robot.setShooterPower(0.9);
+//        robot.goToPoint(new HeadingPoint(96, 64, 180), this::opModeIsActive, 10);
+        robot.goToPoint(new HeadingPoint(80, 68, 180), this::opModeIsActive, 10);
+//        robot.setShooterPower(0.9);
+        robot.setShooterPower(1.0);
         sleep(200);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
-        sleep(200);
-        robot.goToPoint(new HeadingPoint(96, 65, -175), this::opModeIsActive, 3);
+//        robot.goToPoint(new HeadingPoint(105, 60, 180), this::opModeIsActive, 3);
+//        sleep(200);
+//        robot.goToPoint(new HeadingPoint(105, 65, -175), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(80, 68, 176), this::opModeIsActive, 3);
         sleep(200);
         robot.shoot(this::sleep);
-        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
-        sleep(200);
-        robot.goToPoint(new HeadingPoint(96, 65, -170), this::opModeIsActive, 3);
+//        robot.goToPoint(new HeadingPoint(96, 60, 180), this::opModeIsActive, 3);
+//        sleep(200);
+//        robot.goToPoint(new HeadingPoint(96, 65, -170), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(80, 69, 171), this::opModeIsActive, 3);
         sleep(500);
         robot.shoot(this::sleep);
         robot.setShooterPower(0.0);
@@ -70,7 +74,7 @@ public class GenericRedShotsFirst extends LinearOpMode {
         robot.bringArmIn();
         robot.goToPoint(new HeadingPoint(robot.getWobblePoint().getX(), robot.getWobblePoint().getY()-10, robot.getWobblePoint().getHeading()), this::opModeIsActive, 3);
         sleep(200);
-        robot.goToPoint(new HeadingPoint(110, 74, 180), this::opModeIsActive, 3);
+        robot.goToPoint(new HeadingPoint(100, 78, 180), this::opModeIsActive, 3);
         sleep(1000);
         robot.stopRecording();
     }

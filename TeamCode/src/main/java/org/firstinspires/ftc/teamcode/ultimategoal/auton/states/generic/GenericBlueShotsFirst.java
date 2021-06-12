@@ -24,7 +24,7 @@ public class GenericBlueShotsFirst extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         AutoRobot robot = new AutoRobot(new HeadingPoint[]{
                 new HeadingPoint(26, 124, 180),
-                new HeadingPoint(48, 104, 180),
+                new HeadingPoint(48, 100, 180),
                 new HeadingPoint(24, 80, 180),
         }, hardwareMap, telemetry, offset, this::opModeIsActive);
         robot.runVision(this::isStarted);
@@ -57,9 +57,9 @@ public class GenericBlueShotsFirst extends LinearOpMode {
         sleep(500);
         robot.bringArmIn();
         sleep(200);
-        robot.goToPoint(new HeadingPoint(54, robot.getWobblePoint().getY(), 146), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(66, robot.getWobblePoint().getY(), 180), this::opModeIsActive, 4);
         sleep(200);
-        robot.goToPoint(new HeadingPoint(54, 74, 146), this::opModeIsActive, 4);
+        robot.goToPoint(new HeadingPoint(66, 80, 180), this::opModeIsActive, 7);
         robot.stopRecording();
     }
 }

@@ -83,7 +83,7 @@ public class MeccanumDrive extends OpMode {
     Toggle loadToggle = new Toggle();
     Toggle pushToggle = new Toggle();
     Toggle wobbleToggle = new Toggle();
-    Toggle adjPowerToggle = new Toggle();
+//    Toggle adjPowerToggle = new Toggle();
 
 
     //    boolean moveUpper = true;
@@ -126,7 +126,7 @@ public class MeccanumDrive extends OpMode {
 //        flywheel1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        flywheel2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         t.state = false;
-        adjPowerToggle.state = false;
+//        adjPowerToggle.state = false;
         loadToggle.state = false;
         pushToggle.state = false;
         wobbleToggle.state = false;
@@ -308,17 +308,22 @@ public class MeccanumDrive extends OpMode {
 //        telemetry.addData("s1 Red", bottomSensor.red());
 //        telemetry.addData("s2 red", topSensor.red());
 //        telemetry.addData("mover", moveUpper);
-        if (gamepad2.a && !adjPowerToggle.state) {
+//        if (gamepad2.a && !adjPowerToggle.state) {
+//            t.onPress();
+//        } else {
+//            t.onRelease();
+//        }
+        if (gamepad2.a) {
             t.onPress();
         } else {
             t.onRelease();
         }
 
-        if (gamepad2.b && !t.state) {
-            adjPowerToggle.onPress();
-        } else {
-            adjPowerToggle.onRelease();
-        }
+//        if (gamepad2.b && !t.state) {
+//            adjPowerToggle.onPress();
+//        } else {
+//            adjPowerToggle.onRelease();
+//        }
 
         if (gamepad2.x) {
             wobbleToggle.onPress();
@@ -334,7 +339,8 @@ public class MeccanumDrive extends OpMode {
             wobbleArm.setPower(0);
         }
 
-        if (gamepad2.right_bumper && (t.state || adjPowerToggle.state)) {
+//        if (gamepad2.right_bumper && (t.state || adjPowerToggle.state)) {
+        if (gamepad2.right_bumper && t.state) {
             pusher.setPosition(0.65);
             canStop = false;
             exec.schedule(() -> {
@@ -394,10 +400,6 @@ public class MeccanumDrive extends OpMode {
 //            System.out.println("CVEL2z: " + flywheel2.getVelocity());
 //            System.out.println("MAX FLYWHEEL 1: " + flywheel1.getMotorType().getAchieveableMaxTicksPerSecond());
 //            System.out.println("MAX FLYWHEEL 2: " + flywheel2.getMotorType().getAchieveableMaxTicksPerSecond());
-        } else if (adjPowerToggle.state) {
-            loader.setPosition((180.0 - 36.0) / 180.0);
-            flywheel1.setPower(getAdjPower());
-            flywheel2.setPower(getAdjPower());
         } else {
 //            loader.setPosition(1);
             flywheel1.setPower(0);
@@ -406,6 +408,11 @@ public class MeccanumDrive extends OpMode {
                 loader.setPosition(1);
             }
         }
+//        else if (adjPowerToggle.state) {
+//            loader.setPosition((180.0 - 36.0) / 180.0);
+//            flywheel1.setPower(getAdjPower());
+//            flywheel2.setPower(getAdjPower());
+//        }
 
         telemetry.addData("pos", pathfinder.getPosition().toString());
         telemetry.addData("Left ENC", backLeft.getCurrentPosition());

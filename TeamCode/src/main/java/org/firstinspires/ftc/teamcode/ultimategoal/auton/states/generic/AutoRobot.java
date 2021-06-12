@@ -33,6 +33,7 @@ public class AutoRobot {
     DcMotor wobbleArm;
     Servo wobbleDropper;
     Servo webcamServo;
+    Servo webcamTilt;
     DigitalChannel armOut;
     DigitalChannel armIn;
     int zoneOffset = 0;
@@ -70,6 +71,7 @@ public class AutoRobot {
         armIn = hardwareMap.get(DigitalChannel.class, "armIn");
         wobbleArm = hardwareMap.get(DcMotor.class, "wobbleArm");
         webcamServo = hardwareMap.get(Servo.class, "webcamServo");
+        webcamTilt = hardwareMap.get(Servo.class, "webcamTilt");
         setWebcamPos();
         webcam.init(hardwareMap);
         webcam.activateTfod();
@@ -78,6 +80,7 @@ public class AutoRobot {
     }
 
     private void setWebcamPos() {
+        webcamTilt.setPosition(0.1);
         if (offset.getX() < 90) {
             if (offset.getX() < 30) {
                 webcamServo.setPosition(0.45);
@@ -169,6 +172,10 @@ public class AutoRobot {
             List<Recognition> updatedRecognitions = webcam.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 0) {
+                    wobblePoint = potentialWobblePoints[2];
+                    zone = TargetZone.A;
+                }
                 // step through the list of recognitions and display boundary info.
                 for (Recognition recognition : updatedRecognitions) {
                     if (recognition.getLabel().equals("Quad")) {
